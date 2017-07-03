@@ -33,6 +33,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tcMain = new System.Windows.Forms.TabControl();
             this.ControlPage = new System.Windows.Forms.TabPage();
+            this.UCPump = new InkjetPrinter.PumpUserControl();
             this.gbPointData = new System.Windows.Forms.GroupBox();
             this.gbHeater = new System.Windows.Forms.GroupBox();
             this.btnHeatStart = new System.Windows.Forms.Button();
@@ -40,8 +41,8 @@
             this.label11 = new System.Windows.Forms.Label();
             this.lbTemperature = new System.Windows.Forms.Label();
             this.lbTemperatureTitle = new System.Windows.Forms.Label();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.cbCameraEnable = new System.Windows.Forms.CheckBox();
+            this.cbPumpEnable = new System.Windows.Forms.CheckBox();
             this.btnRunPointStop = new System.Windows.Forms.Button();
             this.btnRunPoint = new System.Windows.Forms.Button();
             this.btnOpenCSV = new System.Windows.Forms.Button();
@@ -86,49 +87,6 @@
             this.btnXJogN = new System.Windows.Forms.Button();
             this.btnZJogN = new System.Windows.Forms.Button();
             this.btnYJogP = new System.Windows.Forms.Button();
-            this.gbPump = new System.Windows.Forms.GroupBox();
-            this.gpPumpStatus = new System.Windows.Forms.GroupBox();
-            this.btnPumpStop = new System.Windows.Forms.Button();
-            this.tbPumpPipeOutVel = new System.Windows.Forms.TextBox();
-            this.tbPumpPipeInVel = new System.Windows.Forms.TextBox();
-            this.lbPumpPipeOutVelTitle = new System.Windows.Forms.Label();
-            this.lbPumpPipeInVelTitle = new System.Windows.Forms.Label();
-            this.lbPumpStatus = new System.Windows.Forms.Label();
-            this.lbPumpStatusTitle = new System.Windows.Forms.Label();
-            this.btnPumpInit = new System.Windows.Forms.Button();
-            this.gbSampleControl = new System.Windows.Forms.GroupBox();
-            this.btnNeedle2PipeOut = new System.Windows.Forms.Button();
-            this.tbNeedle2PipeOut = new System.Windows.Forms.TextBox();
-            this.btnNeedle2PipeIn = new System.Windows.Forms.Button();
-            this.tbNeedle2PipeIn = new System.Windows.Forms.TextBox();
-            this.lbNeedle2Volume = new System.Windows.Forms.Label();
-            this.lbNeedle2Title = new System.Windows.Forms.Label();
-            this.btnNeedle1PipeOut = new System.Windows.Forms.Button();
-            this.tbNeedle1PipeOut = new System.Windows.Forms.TextBox();
-            this.btnNeedle1PipeIn = new System.Windows.Forms.Button();
-            this.tbNeedle1PipeIn = new System.Windows.Forms.TextBox();
-            this.lbNeedle1Volume = new System.Windows.Forms.Label();
-            this.lbNeedle1Title = new System.Windows.Forms.Label();
-            this.gbSyrangeCongrol = new System.Windows.Forms.GroupBox();
-            this.btnSyrangePipeInOut = new System.Windows.Forms.Button();
-            this.tbSyrangePipeInOut = new System.Windows.Forms.TextBox();
-            this.lbSyrangePosition = new System.Windows.Forms.Label();
-            this.lbSyrangeTitle = new System.Windows.Forms.Label();
-            this.gbValve = new System.Windows.Forms.GroupBox();
-            this.lbValve6Title = new System.Windows.Forms.Label();
-            this.lbValve5Title = new System.Windows.Forms.Label();
-            this.lbValve4Title = new System.Windows.Forms.Label();
-            this.lbValve3Title = new System.Windows.Forms.Label();
-            this.lbValve2Title = new System.Windows.Forms.Label();
-            this.lbValve1Title = new System.Windows.Forms.Label();
-            this.lbValve = new System.Windows.Forms.Label();
-            this.lbValveTitle = new System.Windows.Forms.Label();
-            this.btnValve6 = new System.Windows.Forms.Button();
-            this.btnValve4 = new System.Windows.Forms.Button();
-            this.btnValve5 = new System.Windows.Forms.Button();
-            this.btnValve3 = new System.Windows.Forms.Button();
-            this.btnValve2 = new System.Windows.Forms.Button();
-            this.btnValve1 = new System.Windows.Forms.Button();
             this.gbCamera = new System.Windows.Forms.GroupBox();
             this.btnSavePhoto = new System.Windows.Forms.Button();
             this.btnStopShoot = new System.Windows.Forms.Button();
@@ -221,11 +179,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.DGPoint)).BeginInit();
             this.gbAxis.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.gbPump.SuspendLayout();
-            this.gpPumpStatus.SuspendLayout();
-            this.gbSampleControl.SuspendLayout();
-            this.gbSyrangeCongrol.SuspendLayout();
-            this.gbValve.SuspendLayout();
             this.gbCamera.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbCamera)).BeginInit();
             this.MotorPage.SuspendLayout();
@@ -252,9 +205,9 @@
             // 
             // ControlPage
             // 
+            this.ControlPage.Controls.Add(this.UCPump);
             this.ControlPage.Controls.Add(this.gbPointData);
             this.ControlPage.Controls.Add(this.gbAxis);
-            this.ControlPage.Controls.Add(this.gbPump);
             this.ControlPage.Controls.Add(this.gbCamera);
             this.ControlPage.Location = new System.Drawing.Point(4, 34);
             this.ControlPage.Name = "ControlPage";
@@ -264,11 +217,36 @@
             this.ControlPage.Text = "Control";
             this.ControlPage.UseVisualStyleBackColor = true;
             // 
+            // UCPump
+            // 
+            this.UCPump.Busy = false;
+            this.UCPump.ErrorCode = 0;
+            this.UCPump.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.UCPump.Location = new System.Drawing.Point(954, 544);
+            this.UCPump.Margin = new System.Windows.Forms.Padding(5);
+            this.UCPump.Name = "UCPump";
+            this.UCPump.Needle1 = 0;
+            this.UCPump.Needle1Pipe = 1;
+            this.UCPump.Needle1PipeIn = 0;
+            this.UCPump.Needle1PipeOut = 0;
+            this.UCPump.Needle2 = 0;
+            this.UCPump.Needle2Pipe = 1;
+            this.UCPump.Needle2PipeIn = 0;
+            this.UCPump.Needle2PipeOut = 0;
+            this.UCPump.PipeInVel = 0;
+            this.UCPump.PipeOutVel = 0;
+            this.UCPump.Plunger = 0;
+            this.UCPump.PlungerMove = 0;
+            this.UCPump.Pump = ((byte)(0));
+            this.UCPump.Size = new System.Drawing.Size(930, 410);
+            this.UCPump.TabIndex = 10;
+            this.UCPump.Valve = 1;
+            // 
             // gbPointData
             // 
             this.gbPointData.Controls.Add(this.gbHeater);
-            this.gbPointData.Controls.Add(this.checkBox2);
-            this.gbPointData.Controls.Add(this.checkBox1);
+            this.gbPointData.Controls.Add(this.cbCameraEnable);
+            this.gbPointData.Controls.Add(this.cbPumpEnable);
             this.gbPointData.Controls.Add(this.btnRunPointStop);
             this.gbPointData.Controls.Add(this.btnRunPoint);
             this.gbPointData.Controls.Add(this.btnOpenCSV);
@@ -341,25 +319,25 @@
             this.lbTemperatureTitle.TabIndex = 56;
             this.lbTemperatureTitle.Text = "加熱板溫度(C)";
             // 
-            // checkBox2
+            // cbCameraEnable
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(650, 330);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(124, 24);
-            this.checkBox2.TabIndex = 12;
-            this.checkBox2.Text = "啟用照相模式";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.cbCameraEnable.AutoSize = true;
+            this.cbCameraEnable.Location = new System.Drawing.Point(650, 330);
+            this.cbCameraEnable.Name = "cbCameraEnable";
+            this.cbCameraEnable.Size = new System.Drawing.Size(124, 24);
+            this.cbCameraEnable.TabIndex = 12;
+            this.cbCameraEnable.Text = "啟用照相模式";
+            this.cbCameraEnable.UseVisualStyleBackColor = true;
             // 
-            // checkBox1
+            // cbPumpEnable
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(650, 300);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(124, 24);
-            this.checkBox1.TabIndex = 11;
-            this.checkBox1.Text = "啟用幫浦系統";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.cbPumpEnable.AutoSize = true;
+            this.cbPumpEnable.Location = new System.Drawing.Point(650, 300);
+            this.cbPumpEnable.Name = "cbPumpEnable";
+            this.cbPumpEnable.Size = new System.Drawing.Size(124, 24);
+            this.cbPumpEnable.TabIndex = 11;
+            this.cbPumpEnable.Text = "啟用幫浦系統";
+            this.cbPumpEnable.UseVisualStyleBackColor = true;
             // 
             // btnRunPointStop
             // 
@@ -456,7 +434,7 @@
             this.gbAxis.Size = new System.Drawing.Size(930, 410);
             this.gbAxis.TabIndex = 7;
             this.gbAxis.TabStop = false;
-            this.gbAxis.Text = "Axis Control";
+            this.gbAxis.Text = "Stage Control";
             // 
             // btnErrorReset
             // 
@@ -880,476 +858,6 @@
             this.btnYJogP.UseVisualStyleBackColor = true;
             this.btnYJogP.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseDown);
             this.btnYJogP.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseUp);
-            // 
-            // gbPump
-            // 
-            this.gbPump.Controls.Add(this.gpPumpStatus);
-            this.gbPump.Controls.Add(this.gbSampleControl);
-            this.gbPump.Controls.Add(this.gbSyrangeCongrol);
-            this.gbPump.Controls.Add(this.gbValve);
-            this.gbPump.Location = new System.Drawing.Point(954, 544);
-            this.gbPump.Name = "gbPump";
-            this.gbPump.Size = new System.Drawing.Size(930, 410);
-            this.gbPump.TabIndex = 8;
-            this.gbPump.TabStop = false;
-            this.gbPump.Text = "Pump Control";
-            // 
-            // gpPumpStatus
-            // 
-            this.gpPumpStatus.Controls.Add(this.btnPumpStop);
-            this.gpPumpStatus.Controls.Add(this.tbPumpPipeOutVel);
-            this.gpPumpStatus.Controls.Add(this.tbPumpPipeInVel);
-            this.gpPumpStatus.Controls.Add(this.lbPumpPipeOutVelTitle);
-            this.gpPumpStatus.Controls.Add(this.lbPumpPipeInVelTitle);
-            this.gpPumpStatus.Controls.Add(this.lbPumpStatus);
-            this.gpPumpStatus.Controls.Add(this.lbPumpStatusTitle);
-            this.gpPumpStatus.Controls.Add(this.btnPumpInit);
-            this.gpPumpStatus.Location = new System.Drawing.Point(290, 170);
-            this.gpPumpStatus.Name = "gpPumpStatus";
-            this.gpPumpStatus.Size = new System.Drawing.Size(300, 220);
-            this.gpPumpStatus.TabIndex = 5;
-            this.gpPumpStatus.TabStop = false;
-            this.gpPumpStatus.Text = "幫浦狀態";
-            // 
-            // btnPumpStop
-            // 
-            this.btnPumpStop.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnPumpStop.Location = new System.Drawing.Point(170, 70);
-            this.btnPumpStop.Name = "btnPumpStop";
-            this.btnPumpStop.Size = new System.Drawing.Size(100, 40);
-            this.btnPumpStop.TabIndex = 11;
-            this.btnPumpStop.Text = "幫浦停止";
-            this.btnPumpStop.UseVisualStyleBackColor = true;
-            this.btnPumpStop.Click += new System.EventHandler(this.btnPump_Click);
-            // 
-            // tbPumpPipeOutVel
-            // 
-            this.tbPumpPipeOutVel.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.tbPumpPipeOutVel.Location = new System.Drawing.Point(170, 160);
-            this.tbPumpPipeOutVel.Name = "tbPumpPipeOutVel";
-            this.tbPumpPipeOutVel.Size = new System.Drawing.Size(100, 39);
-            this.tbPumpPipeOutVel.TabIndex = 10;
-            this.tbPumpPipeOutVel.TextChanged += new System.EventHandler(this.PumpPara_TextChanged);
-            this.tbPumpPipeOutVel.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.int_KeyPress);
-            // 
-            // tbPumpPipeInVel
-            // 
-            this.tbPumpPipeInVel.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.tbPumpPipeInVel.Location = new System.Drawing.Point(170, 120);
-            this.tbPumpPipeInVel.Name = "tbPumpPipeInVel";
-            this.tbPumpPipeInVel.Size = new System.Drawing.Size(100, 39);
-            this.tbPumpPipeInVel.TabIndex = 9;
-            this.tbPumpPipeInVel.TextChanged += new System.EventHandler(this.PumpPara_TextChanged);
-            this.tbPumpPipeInVel.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.int_KeyPress);
-            // 
-            // lbPumpPipeOutVelTitle
-            // 
-            this.lbPumpPipeOutVelTitle.AutoSize = true;
-            this.lbPumpPipeOutVelTitle.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbPumpPipeOutVelTitle.Location = new System.Drawing.Point(20, 165);
-            this.lbPumpPipeOutVelTitle.Name = "lbPumpPipeOutVelTitle";
-            this.lbPumpPipeOutVelTitle.Size = new System.Drawing.Size(109, 30);
-            this.lbPumpPipeOutVelTitle.TabIndex = 8;
-            this.lbPumpPipeOutVelTitle.Text = "排出速度";
-            // 
-            // lbPumpPipeInVelTitle
-            // 
-            this.lbPumpPipeInVelTitle.AutoSize = true;
-            this.lbPumpPipeInVelTitle.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbPumpPipeInVelTitle.Location = new System.Drawing.Point(20, 125);
-            this.lbPumpPipeInVelTitle.Name = "lbPumpPipeInVelTitle";
-            this.lbPumpPipeInVelTitle.Size = new System.Drawing.Size(109, 30);
-            this.lbPumpPipeInVelTitle.TabIndex = 7;
-            this.lbPumpPipeInVelTitle.Text = "回抽速度";
-            // 
-            // lbPumpStatus
-            // 
-            this.lbPumpStatus.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbPumpStatus.Location = new System.Drawing.Point(170, 30);
-            this.lbPumpStatus.Name = "lbPumpStatus";
-            this.lbPumpStatus.Size = new System.Drawing.Size(100, 30);
-            this.lbPumpStatus.TabIndex = 6;
-            this.lbPumpStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lbPumpStatusTitle
-            // 
-            this.lbPumpStatusTitle.AutoSize = true;
-            this.lbPumpStatusTitle.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbPumpStatusTitle.Location = new System.Drawing.Point(20, 30);
-            this.lbPumpStatusTitle.Name = "lbPumpStatusTitle";
-            this.lbPumpStatusTitle.Size = new System.Drawing.Size(109, 30);
-            this.lbPumpStatusTitle.TabIndex = 5;
-            this.lbPumpStatusTitle.Text = "幫浦狀態";
-            // 
-            // btnPumpInit
-            // 
-            this.btnPumpInit.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnPumpInit.Location = new System.Drawing.Point(20, 70);
-            this.btnPumpInit.Name = "btnPumpInit";
-            this.btnPumpInit.Size = new System.Drawing.Size(100, 40);
-            this.btnPumpInit.TabIndex = 4;
-            this.btnPumpInit.Text = "初始化";
-            this.btnPumpInit.UseVisualStyleBackColor = true;
-            this.btnPumpInit.Click += new System.EventHandler(this.btnPump_Click);
-            // 
-            // gbSampleControl
-            // 
-            this.gbSampleControl.Controls.Add(this.btnNeedle2PipeOut);
-            this.gbSampleControl.Controls.Add(this.tbNeedle2PipeOut);
-            this.gbSampleControl.Controls.Add(this.btnNeedle2PipeIn);
-            this.gbSampleControl.Controls.Add(this.tbNeedle2PipeIn);
-            this.gbSampleControl.Controls.Add(this.lbNeedle2Volume);
-            this.gbSampleControl.Controls.Add(this.lbNeedle2Title);
-            this.gbSampleControl.Controls.Add(this.btnNeedle1PipeOut);
-            this.gbSampleControl.Controls.Add(this.tbNeedle1PipeOut);
-            this.gbSampleControl.Controls.Add(this.btnNeedle1PipeIn);
-            this.gbSampleControl.Controls.Add(this.tbNeedle1PipeIn);
-            this.gbSampleControl.Controls.Add(this.lbNeedle1Volume);
-            this.gbSampleControl.Controls.Add(this.lbNeedle1Title);
-            this.gbSampleControl.Location = new System.Drawing.Point(610, 40);
-            this.gbSampleControl.Name = "gbSampleControl";
-            this.gbSampleControl.Size = new System.Drawing.Size(300, 350);
-            this.gbSampleControl.TabIndex = 2;
-            this.gbSampleControl.TabStop = false;
-            this.gbSampleControl.Text = "抽取控制";
-            // 
-            // btnNeedle2PipeOut
-            // 
-            this.btnNeedle2PipeOut.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnNeedle2PipeOut.Location = new System.Drawing.Point(20, 260);
-            this.btnNeedle2PipeOut.Name = "btnNeedle2PipeOut";
-            this.btnNeedle2PipeOut.Size = new System.Drawing.Size(100, 40);
-            this.btnNeedle2PipeOut.TabIndex = 21;
-            this.btnNeedle2PipeOut.Text = "排出";
-            this.btnNeedle2PipeOut.UseVisualStyleBackColor = true;
-            this.btnNeedle2PipeOut.Click += new System.EventHandler(this.btnPump_Click);
-            // 
-            // tbNeedle2PipeOut
-            // 
-            this.tbNeedle2PipeOut.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.tbNeedle2PipeOut.Location = new System.Drawing.Point(170, 260);
-            this.tbNeedle2PipeOut.Name = "tbNeedle2PipeOut";
-            this.tbNeedle2PipeOut.Size = new System.Drawing.Size(100, 39);
-            this.tbNeedle2PipeOut.TabIndex = 20;
-            this.tbNeedle2PipeOut.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.int_KeyPress);
-            // 
-            // btnNeedle2PipeIn
-            // 
-            this.btnNeedle2PipeIn.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnNeedle2PipeIn.Location = new System.Drawing.Point(20, 210);
-            this.btnNeedle2PipeIn.Name = "btnNeedle2PipeIn";
-            this.btnNeedle2PipeIn.Size = new System.Drawing.Size(100, 40);
-            this.btnNeedle2PipeIn.TabIndex = 19;
-            this.btnNeedle2PipeIn.Text = "回抽";
-            this.btnNeedle2PipeIn.UseVisualStyleBackColor = true;
-            this.btnNeedle2PipeIn.Click += new System.EventHandler(this.btnPump_Click);
-            // 
-            // tbNeedle2PipeIn
-            // 
-            this.tbNeedle2PipeIn.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.tbNeedle2PipeIn.Location = new System.Drawing.Point(170, 210);
-            this.tbNeedle2PipeIn.Name = "tbNeedle2PipeIn";
-            this.tbNeedle2PipeIn.Size = new System.Drawing.Size(100, 39);
-            this.tbNeedle2PipeIn.TabIndex = 18;
-            this.tbNeedle2PipeIn.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.int_KeyPress);
-            // 
-            // lbNeedle2Volume
-            // 
-            this.lbNeedle2Volume.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbNeedle2Volume.Location = new System.Drawing.Point(170, 170);
-            this.lbNeedle2Volume.Name = "lbNeedle2Volume";
-            this.lbNeedle2Volume.Size = new System.Drawing.Size(100, 30);
-            this.lbNeedle2Volume.TabIndex = 17;
-            // 
-            // lbNeedle2Title
-            // 
-            this.lbNeedle2Title.AutoSize = true;
-            this.lbNeedle2Title.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbNeedle2Title.Location = new System.Drawing.Point(20, 170);
-            this.lbNeedle2Title.Name = "lbNeedle2Title";
-            this.lbNeedle2Title.Size = new System.Drawing.Size(75, 30);
-            this.lbNeedle2Title.TabIndex = 16;
-            this.lbNeedle2Title.Text = "針頭2";
-            // 
-            // btnNeedle1PipeOut
-            // 
-            this.btnNeedle1PipeOut.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnNeedle1PipeOut.Location = new System.Drawing.Point(20, 120);
-            this.btnNeedle1PipeOut.Name = "btnNeedle1PipeOut";
-            this.btnNeedle1PipeOut.Size = new System.Drawing.Size(100, 40);
-            this.btnNeedle1PipeOut.TabIndex = 15;
-            this.btnNeedle1PipeOut.Text = "排出";
-            this.btnNeedle1PipeOut.UseVisualStyleBackColor = true;
-            this.btnNeedle1PipeOut.Click += new System.EventHandler(this.btnPump_Click);
-            // 
-            // tbNeedle1PipeOut
-            // 
-            this.tbNeedle1PipeOut.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.tbNeedle1PipeOut.Location = new System.Drawing.Point(170, 120);
-            this.tbNeedle1PipeOut.Name = "tbNeedle1PipeOut";
-            this.tbNeedle1PipeOut.Size = new System.Drawing.Size(100, 39);
-            this.tbNeedle1PipeOut.TabIndex = 14;
-            this.tbNeedle1PipeOut.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.int_KeyPress);
-            // 
-            // btnNeedle1PipeIn
-            // 
-            this.btnNeedle1PipeIn.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnNeedle1PipeIn.Location = new System.Drawing.Point(20, 70);
-            this.btnNeedle1PipeIn.Name = "btnNeedle1PipeIn";
-            this.btnNeedle1PipeIn.Size = new System.Drawing.Size(100, 40);
-            this.btnNeedle1PipeIn.TabIndex = 13;
-            this.btnNeedle1PipeIn.Text = "回抽";
-            this.btnNeedle1PipeIn.UseVisualStyleBackColor = true;
-            this.btnNeedle1PipeIn.Click += new System.EventHandler(this.btnPump_Click);
-            // 
-            // tbNeedle1PipeIn
-            // 
-            this.tbNeedle1PipeIn.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.tbNeedle1PipeIn.Location = new System.Drawing.Point(170, 70);
-            this.tbNeedle1PipeIn.Name = "tbNeedle1PipeIn";
-            this.tbNeedle1PipeIn.Size = new System.Drawing.Size(100, 39);
-            this.tbNeedle1PipeIn.TabIndex = 12;
-            this.tbNeedle1PipeIn.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.int_KeyPress);
-            // 
-            // lbNeedle1Volume
-            // 
-            this.lbNeedle1Volume.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbNeedle1Volume.Location = new System.Drawing.Point(170, 30);
-            this.lbNeedle1Volume.Name = "lbNeedle1Volume";
-            this.lbNeedle1Volume.Size = new System.Drawing.Size(100, 30);
-            this.lbNeedle1Volume.TabIndex = 11;
-            // 
-            // lbNeedle1Title
-            // 
-            this.lbNeedle1Title.AutoSize = true;
-            this.lbNeedle1Title.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbNeedle1Title.Location = new System.Drawing.Point(20, 30);
-            this.lbNeedle1Title.Name = "lbNeedle1Title";
-            this.lbNeedle1Title.Size = new System.Drawing.Size(75, 30);
-            this.lbNeedle1Title.TabIndex = 10;
-            this.lbNeedle1Title.Text = "針頭1";
-            // 
-            // gbSyrangeCongrol
-            // 
-            this.gbSyrangeCongrol.Controls.Add(this.btnSyrangePipeInOut);
-            this.gbSyrangeCongrol.Controls.Add(this.tbSyrangePipeInOut);
-            this.gbSyrangeCongrol.Controls.Add(this.lbSyrangePosition);
-            this.gbSyrangeCongrol.Controls.Add(this.lbSyrangeTitle);
-            this.gbSyrangeCongrol.Location = new System.Drawing.Point(290, 40);
-            this.gbSyrangeCongrol.Name = "gbSyrangeCongrol";
-            this.gbSyrangeCongrol.Size = new System.Drawing.Size(300, 130);
-            this.gbSyrangeCongrol.TabIndex = 1;
-            this.gbSyrangeCongrol.TabStop = false;
-            this.gbSyrangeCongrol.Text = "針筒控制";
-            // 
-            // btnSyrangePipeInOut
-            // 
-            this.btnSyrangePipeInOut.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnSyrangePipeInOut.Location = new System.Drawing.Point(20, 70);
-            this.btnSyrangePipeInOut.Name = "btnSyrangePipeInOut";
-            this.btnSyrangePipeInOut.Size = new System.Drawing.Size(100, 40);
-            this.btnSyrangePipeInOut.TabIndex = 3;
-            this.btnSyrangePipeInOut.Text = "移動至";
-            this.btnSyrangePipeInOut.UseVisualStyleBackColor = true;
-            this.btnSyrangePipeInOut.Click += new System.EventHandler(this.btnPump_Click);
-            // 
-            // tbSyrangePipeInOut
-            // 
-            this.tbSyrangePipeInOut.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.tbSyrangePipeInOut.Location = new System.Drawing.Point(170, 70);
-            this.tbSyrangePipeInOut.Name = "tbSyrangePipeInOut";
-            this.tbSyrangePipeInOut.Size = new System.Drawing.Size(100, 39);
-            this.tbSyrangePipeInOut.TabIndex = 2;
-            this.tbSyrangePipeInOut.TextChanged += new System.EventHandler(this.PumpPara_TextChanged);
-            this.tbSyrangePipeInOut.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.int_KeyPress);
-            // 
-            // lbSyrangePosition
-            // 
-            this.lbSyrangePosition.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbSyrangePosition.Location = new System.Drawing.Point(170, 30);
-            this.lbSyrangePosition.Name = "lbSyrangePosition";
-            this.lbSyrangePosition.Size = new System.Drawing.Size(100, 30);
-            this.lbSyrangePosition.TabIndex = 1;
-            this.lbSyrangePosition.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lbSyrangeTitle
-            // 
-            this.lbSyrangeTitle.AutoSize = true;
-            this.lbSyrangeTitle.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbSyrangeTitle.Location = new System.Drawing.Point(20, 30);
-            this.lbSyrangeTitle.Name = "lbSyrangeTitle";
-            this.lbSyrangeTitle.Size = new System.Drawing.Size(109, 30);
-            this.lbSyrangeTitle.TabIndex = 0;
-            this.lbSyrangeTitle.Text = "針筒位置";
-            // 
-            // gbValve
-            // 
-            this.gbValve.Controls.Add(this.lbValve6Title);
-            this.gbValve.Controls.Add(this.lbValve5Title);
-            this.gbValve.Controls.Add(this.lbValve4Title);
-            this.gbValve.Controls.Add(this.lbValve3Title);
-            this.gbValve.Controls.Add(this.lbValve2Title);
-            this.gbValve.Controls.Add(this.lbValve1Title);
-            this.gbValve.Controls.Add(this.lbValve);
-            this.gbValve.Controls.Add(this.lbValveTitle);
-            this.gbValve.Controls.Add(this.btnValve6);
-            this.gbValve.Controls.Add(this.btnValve4);
-            this.gbValve.Controls.Add(this.btnValve5);
-            this.gbValve.Controls.Add(this.btnValve3);
-            this.gbValve.Controls.Add(this.btnValve2);
-            this.gbValve.Controls.Add(this.btnValve1);
-            this.gbValve.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.gbValve.Location = new System.Drawing.Point(20, 40);
-            this.gbValve.Name = "gbValve";
-            this.gbValve.Size = new System.Drawing.Size(250, 350);
-            this.gbValve.TabIndex = 0;
-            this.gbValve.TabStop = false;
-            this.gbValve.Text = "閥門控制";
-            // 
-            // lbValve6Title
-            // 
-            this.lbValve6Title.AutoSize = true;
-            this.lbValve6Title.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbValve6Title.Location = new System.Drawing.Point(20, 270);
-            this.lbValve6Title.Name = "lbValve6Title";
-            this.lbValve6Title.Size = new System.Drawing.Size(27, 30);
-            this.lbValve6Title.TabIndex = 13;
-            this.lbValve6Title.Text = "6";
-            // 
-            // lbValve5Title
-            // 
-            this.lbValve5Title.AutoSize = true;
-            this.lbValve5Title.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbValve5Title.Location = new System.Drawing.Point(20, 230);
-            this.lbValve5Title.Name = "lbValve5Title";
-            this.lbValve5Title.Size = new System.Drawing.Size(27, 30);
-            this.lbValve5Title.TabIndex = 12;
-            this.lbValve5Title.Text = "5";
-            // 
-            // lbValve4Title
-            // 
-            this.lbValve4Title.AutoSize = true;
-            this.lbValve4Title.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbValve4Title.Location = new System.Drawing.Point(20, 190);
-            this.lbValve4Title.Name = "lbValve4Title";
-            this.lbValve4Title.Size = new System.Drawing.Size(27, 30);
-            this.lbValve4Title.TabIndex = 11;
-            this.lbValve4Title.Text = "4";
-            // 
-            // lbValve3Title
-            // 
-            this.lbValve3Title.AutoSize = true;
-            this.lbValve3Title.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbValve3Title.Location = new System.Drawing.Point(20, 150);
-            this.lbValve3Title.Name = "lbValve3Title";
-            this.lbValve3Title.Size = new System.Drawing.Size(75, 30);
-            this.lbValve3Title.TabIndex = 10;
-            this.lbValve3Title.Text = "針頭2";
-            // 
-            // lbValve2Title
-            // 
-            this.lbValve2Title.AutoSize = true;
-            this.lbValve2Title.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbValve2Title.Location = new System.Drawing.Point(20, 110);
-            this.lbValve2Title.Name = "lbValve2Title";
-            this.lbValve2Title.Size = new System.Drawing.Size(75, 30);
-            this.lbValve2Title.TabIndex = 9;
-            this.lbValve2Title.Text = "針頭1";
-            // 
-            // lbValve1Title
-            // 
-            this.lbValve1Title.AutoSize = true;
-            this.lbValve1Title.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbValve1Title.Location = new System.Drawing.Point(20, 70);
-            this.lbValve1Title.Name = "lbValve1Title";
-            this.lbValve1Title.Size = new System.Drawing.Size(85, 30);
-            this.lbValve1Title.TabIndex = 8;
-            this.lbValve1Title.Text = "清水入";
-            // 
-            // lbValve
-            // 
-            this.lbValve.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbValve.Location = new System.Drawing.Point(170, 30);
-            this.lbValve.Name = "lbValve";
-            this.lbValve.Size = new System.Drawing.Size(40, 30);
-            this.lbValve.TabIndex = 7;
-            this.lbValve.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lbValveTitle
-            // 
-            this.lbValveTitle.AutoSize = true;
-            this.lbValveTitle.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbValveTitle.Location = new System.Drawing.Point(20, 30);
-            this.lbValveTitle.Name = "lbValveTitle";
-            this.lbValveTitle.Size = new System.Drawing.Size(109, 30);
-            this.lbValveTitle.TabIndex = 6;
-            this.lbValveTitle.Text = "閥門位置";
-            // 
-            // btnValve6
-            // 
-            this.btnValve6.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnValve6.Location = new System.Drawing.Point(170, 270);
-            this.btnValve6.Name = "btnValve6";
-            this.btnValve6.Size = new System.Drawing.Size(40, 40);
-            this.btnValve6.TabIndex = 5;
-            this.btnValve6.Text = "6";
-            this.btnValve6.UseVisualStyleBackColor = true;
-            this.btnValve6.Click += new System.EventHandler(this.btnPump_Click);
-            // 
-            // btnValve4
-            // 
-            this.btnValve4.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnValve4.Location = new System.Drawing.Point(170, 190);
-            this.btnValve4.Name = "btnValve4";
-            this.btnValve4.Size = new System.Drawing.Size(40, 40);
-            this.btnValve4.TabIndex = 4;
-            this.btnValve4.Text = "4";
-            this.btnValve4.UseVisualStyleBackColor = true;
-            this.btnValve4.Click += new System.EventHandler(this.btnPump_Click);
-            // 
-            // btnValve5
-            // 
-            this.btnValve5.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnValve5.Location = new System.Drawing.Point(170, 230);
-            this.btnValve5.Name = "btnValve5";
-            this.btnValve5.Size = new System.Drawing.Size(40, 40);
-            this.btnValve5.TabIndex = 3;
-            this.btnValve5.Text = "5";
-            this.btnValve5.UseVisualStyleBackColor = true;
-            this.btnValve5.Click += new System.EventHandler(this.btnPump_Click);
-            // 
-            // btnValve3
-            // 
-            this.btnValve3.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnValve3.Location = new System.Drawing.Point(170, 150);
-            this.btnValve3.Name = "btnValve3";
-            this.btnValve3.Size = new System.Drawing.Size(40, 40);
-            this.btnValve3.TabIndex = 2;
-            this.btnValve3.Text = "3";
-            this.btnValve3.UseVisualStyleBackColor = true;
-            this.btnValve3.Click += new System.EventHandler(this.btnPump_Click);
-            // 
-            // btnValve2
-            // 
-            this.btnValve2.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnValve2.Location = new System.Drawing.Point(170, 110);
-            this.btnValve2.Name = "btnValve2";
-            this.btnValve2.Size = new System.Drawing.Size(40, 40);
-            this.btnValve2.TabIndex = 1;
-            this.btnValve2.Text = "2";
-            this.btnValve2.UseVisualStyleBackColor = true;
-            this.btnValve2.Click += new System.EventHandler(this.btnPump_Click);
-            // 
-            // btnValve1
-            // 
-            this.btnValve1.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnValve1.Location = new System.Drawing.Point(170, 70);
-            this.btnValve1.Name = "btnValve1";
-            this.btnValve1.Size = new System.Drawing.Size(40, 40);
-            this.btnValve1.TabIndex = 0;
-            this.btnValve1.Text = "1";
-            this.btnValve1.UseVisualStyleBackColor = true;
-            this.btnValve1.Click += new System.EventHandler(this.btnPump_Click);
             // 
             // gbCamera
             // 
@@ -2277,15 +1785,6 @@
             this.gbAxis.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.gbPump.ResumeLayout(false);
-            this.gpPumpStatus.ResumeLayout(false);
-            this.gpPumpStatus.PerformLayout();
-            this.gbSampleControl.ResumeLayout(false);
-            this.gbSampleControl.PerformLayout();
-            this.gbSyrangeCongrol.ResumeLayout(false);
-            this.gbSyrangeCongrol.PerformLayout();
-            this.gbValve.ResumeLayout(false);
-            this.gbValve.PerformLayout();
             this.gbCamera.ResumeLayout(false);
             this.gbCamera.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbCamera)).EndInit();
@@ -2307,7 +1806,6 @@
         private System.Windows.Forms.TabPage CameraPage;
         private System.Windows.Forms.TabPage ControlPage;
         private System.Windows.Forms.GroupBox gbPointData;
-        private System.Windows.Forms.GroupBox gbPump;
         private System.Windows.Forms.GroupBox gbAxis;
         private System.Windows.Forms.Button btnYJogN;
         private System.Windows.Forms.Button btnXJogP;
@@ -2432,8 +1930,8 @@
         private System.Windows.Forms.Button btnContinuousShoot;
         private System.Windows.Forms.Button btnOneShoot;
         private System.Windows.Forms.Button btnSavePhoto;
-        private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox cbCameraEnable;
+        private System.Windows.Forms.CheckBox cbPumpEnable;
         private System.Windows.Forms.GroupBox gbHeater;
         private System.Windows.Forms.Button btnHeatStart;
         private System.Windows.Forms.TextBox tbHeatTemperature;
@@ -2443,48 +1941,7 @@
         private System.Windows.Forms.Button btnErrorReset;
         private System.Windows.Forms.Label lbStageStatus;
         private System.Windows.Forms.Label lbStageStatusTitle;
-        private System.Windows.Forms.GroupBox gbValve;
-        private System.Windows.Forms.Label lbValve3Title;
-        private System.Windows.Forms.Label lbValve2Title;
-        private System.Windows.Forms.Label lbValve1Title;
-        private System.Windows.Forms.Label lbValve;
-        private System.Windows.Forms.Label lbValveTitle;
-        private System.Windows.Forms.Button btnValve3;
-        private System.Windows.Forms.Button btnValve2;
-        private System.Windows.Forms.Button btnValve1;
-        private System.Windows.Forms.GroupBox gbSyrangeCongrol;
-        private System.Windows.Forms.TextBox tbSyrangePipeInOut;
-        private System.Windows.Forms.Label lbSyrangePosition;
-        private System.Windows.Forms.Label lbSyrangeTitle;
-        private System.Windows.Forms.Button btnSyrangePipeInOut;
-        private System.Windows.Forms.GroupBox gbSampleControl;
-        private System.Windows.Forms.Button btnNeedle2PipeOut;
-        private System.Windows.Forms.TextBox tbNeedle2PipeOut;
-        private System.Windows.Forms.Button btnNeedle2PipeIn;
-        private System.Windows.Forms.TextBox tbNeedle2PipeIn;
-        private System.Windows.Forms.Label lbNeedle2Volume;
-        private System.Windows.Forms.Label lbNeedle2Title;
-        private System.Windows.Forms.Button btnNeedle1PipeOut;
-        private System.Windows.Forms.TextBox tbNeedle1PipeOut;
-        private System.Windows.Forms.Button btnNeedle1PipeIn;
-        private System.Windows.Forms.TextBox tbNeedle1PipeIn;
-        private System.Windows.Forms.Label lbNeedle1Volume;
-        private System.Windows.Forms.Label lbNeedle1Title;
-        private System.Windows.Forms.Button btnPumpInit;
-        private System.Windows.Forms.GroupBox gpPumpStatus;
-        private System.Windows.Forms.Label lbPumpStatus;
-        private System.Windows.Forms.Label lbPumpStatusTitle;
-        private System.Windows.Forms.Label lbValve6Title;
-        private System.Windows.Forms.Label lbValve5Title;
-        private System.Windows.Forms.Label lbValve4Title;
-        private System.Windows.Forms.Button btnValve6;
-        private System.Windows.Forms.Button btnValve4;
-        private System.Windows.Forms.Button btnValve5;
-        private System.Windows.Forms.TextBox tbPumpPipeOutVel;
-        private System.Windows.Forms.TextBox tbPumpPipeInVel;
-        private System.Windows.Forms.Label lbPumpPipeOutVelTitle;
-        private System.Windows.Forms.Label lbPumpPipeInVelTitle;
-        private System.Windows.Forms.Button btnPumpStop;
+        private PumpUserControl UCPump;
     }
 }
 

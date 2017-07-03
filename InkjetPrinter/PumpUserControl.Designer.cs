@@ -97,7 +97,7 @@ namespace InkjetPrinter
             this.gbPump.Controls.Add(this.gbPlunger);
             this.gbPump.Controls.Add(this.gbValve);
             this.gbPump.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.gbPump.Location = new System.Drawing.Point(8, 8);
+            this.gbPump.Location = new System.Drawing.Point(0, 0);
             this.gbPump.Name = "gbPump";
             this.gbPump.Size = new System.Drawing.Size(930, 410);
             this.gbPump.TabIndex = 1;
@@ -565,9 +565,11 @@ namespace InkjetPrinter
             // 
             // PumpUserControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.gbPump);
+            this.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.Name = "PumpUserControl";
             this.Size = new System.Drawing.Size(930, 410);
             this.Load += new System.EventHandler(this.PumpUserControl_Load);
@@ -589,52 +591,6 @@ namespace InkjetPrinter
         }
 
         #endregion
-
-        private System.Windows.Forms.GroupBox gbPump;
-        private System.Windows.Forms.GroupBox gbReceiveData;
-        private System.Windows.Forms.TextBox tbReceiveData;
-        private System.Windows.Forms.GroupBox gbSendData;
-        private System.Windows.Forms.TextBox tbSendData;
-        private System.Windows.Forms.GroupBox gbPipeControl;
-        private System.Windows.Forms.RadioButton rbtnAir;
-        private System.Windows.Forms.RadioButton rbtnWater;
-        private System.Windows.Forms.TextBox tbPipeIntro;
-        private System.Windows.Forms.TextBox tbNeedle2Pipe;
-        private System.Windows.Forms.Label lbNeedle2PipeTitle;
-        private System.Windows.Forms.TextBox tbNeedle1Pipe;
-        private System.Windows.Forms.Label lbNeedle1PipeTitle;
-        private System.Windows.Forms.Button btnPumpStop;
-        private System.Windows.Forms.Button btnPumpInit;
-        private System.Windows.Forms.Label lbPump;
-        private System.Windows.Forms.Label lbPumpTitle;
-        private System.Windows.Forms.GroupBox gbNeedle;
-        private System.Windows.Forms.TextBox tbNeedle2PipeOut;
-        private System.Windows.Forms.Button btnNeedle2PipeOut;
-        private System.Windows.Forms.TextBox tbNeedle2PipeIn;
-        private System.Windows.Forms.Button btnNeedle2PipeIn;
-        private System.Windows.Forms.Label lbNeedle2;
-        private System.Windows.Forms.Label lbNeedle2Title;
-        private System.Windows.Forms.TextBox tbNeedle1PipeOut;
-        private System.Windows.Forms.Button btnNeedle1PipeOut;
-        private System.Windows.Forms.TextBox tbNeedle1PipeIn;
-        private System.Windows.Forms.Button btnNeedle1PipeIn;
-        private System.Windows.Forms.Label lbNeedle1;
-        private System.Windows.Forms.Label lbNeedle1Title;
-        private System.Windows.Forms.GroupBox gbPlunger;
-        private System.Windows.Forms.TextBox tbPipeOutVel;
-        private System.Windows.Forms.TextBox tbPipeInVel;
-        private System.Windows.Forms.Label lbPipeOutVelTitle;
-        private System.Windows.Forms.Label lbPipeInVelTitle;
-        private System.Windows.Forms.TextBox tbPlunger;
-        private System.Windows.Forms.Button btnPlunger;
-        private System.Windows.Forms.Label lbPlunger;
-        private System.Windows.Forms.Label lbPlungerTitle;
-        private System.Windows.Forms.GroupBox gbValve;
-        private System.Windows.Forms.ComboBox cbValve;
-        private System.Windows.Forms.TextBox tbValveIntro;
-        private System.Windows.Forms.Button btnValve;
-        private System.Windows.Forms.Label lbValve;
-        private System.Windows.Forms.Label lbValveTitle;
 
         //Manual Define
         private int _Valve;
@@ -910,10 +866,56 @@ namespace InkjetPrinter
             }
         }
         public bool Cycle_Pipe;
+        private int SendCount;
         //Pump Serial Port
         public SerialPort PumpPort = new SerialPort();
         private int count;
         private string Command;
+        private System.Windows.Forms.GroupBox gbPump;
+        private System.Windows.Forms.GroupBox gbReceiveData;
+        private System.Windows.Forms.TextBox tbReceiveData;
+        private System.Windows.Forms.GroupBox gbSendData;
+        private System.Windows.Forms.TextBox tbSendData;
+        private System.Windows.Forms.GroupBox gbPipeControl;
+        private System.Windows.Forms.RadioButton rbtnAir;
+        private System.Windows.Forms.RadioButton rbtnWater;
+        private System.Windows.Forms.TextBox tbPipeIntro;
+        private System.Windows.Forms.TextBox tbNeedle2Pipe;
+        private System.Windows.Forms.Label lbNeedle2PipeTitle;
+        private System.Windows.Forms.TextBox tbNeedle1Pipe;
+        private System.Windows.Forms.Label lbNeedle1PipeTitle;
+        private System.Windows.Forms.Button btnPumpStop;
+        private System.Windows.Forms.Button btnPumpInit;
+        private System.Windows.Forms.Label lbPump;
+        private System.Windows.Forms.Label lbPumpTitle;
+        private System.Windows.Forms.GroupBox gbNeedle;
+        private System.Windows.Forms.TextBox tbNeedle2PipeOut;
+        private System.Windows.Forms.Button btnNeedle2PipeOut;
+        private System.Windows.Forms.TextBox tbNeedle2PipeIn;
+        private System.Windows.Forms.Button btnNeedle2PipeIn;
+        private System.Windows.Forms.Label lbNeedle2;
+        private System.Windows.Forms.Label lbNeedle2Title;
+        private System.Windows.Forms.TextBox tbNeedle1PipeOut;
+        private System.Windows.Forms.Button btnNeedle1PipeOut;
+        private System.Windows.Forms.TextBox tbNeedle1PipeIn;
+        private System.Windows.Forms.Button btnNeedle1PipeIn;
+        private System.Windows.Forms.Label lbNeedle1;
+        private System.Windows.Forms.Label lbNeedle1Title;
+        private System.Windows.Forms.GroupBox gbPlunger;
+        private System.Windows.Forms.TextBox tbPipeOutVel;
+        private System.Windows.Forms.TextBox tbPipeInVel;
+        private System.Windows.Forms.Label lbPipeOutVelTitle;
+        private System.Windows.Forms.Label lbPipeInVelTitle;
+        private System.Windows.Forms.TextBox tbPlunger;
+        private System.Windows.Forms.Button btnPlunger;
+        private System.Windows.Forms.Label lbPlunger;
+        private System.Windows.Forms.Label lbPlungerTitle;
+        private System.Windows.Forms.GroupBox gbValve;
+        private System.Windows.Forms.ComboBox cbValve;
+        private System.Windows.Forms.TextBox tbValveIntro;
+        private System.Windows.Forms.Button btnValve;
+        private System.Windows.Forms.Label lbValve;
+        private System.Windows.Forms.Label lbValveTitle;
 
         delegate void Display(string str);
     }

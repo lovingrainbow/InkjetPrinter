@@ -71,7 +71,6 @@ namespace InkjetPrinter
             else
                 e.Handled = true;
         }
-
         private void Pump_TextChange(object sender, EventArgs e)
         {
             TextBox tb = (TextBox)sender;
@@ -111,8 +110,7 @@ namespace InkjetPrinter
                 }
             }
         }
-
-        private void ButtonControl(bool control)
+        public void ButtonControl(bool control)
         {
             btnValve.Enabled = control;
             btnPlunger.Enabled = control;
@@ -121,7 +119,6 @@ namespace InkjetPrinter
             btnNeedle2PipeIn.Enabled = control;
             btnNeedle2PipeOut.Enabled = control;
         }
-
         public void RefreshPumpUI()
         {
             if (PumpPort.IsOpen)
@@ -175,6 +172,14 @@ namespace InkjetPrinter
             //tbNeedle1 tbNeedle2 refresh
             lbNeedle1.Text = _Needle1.ToString();
             lbNeedle2.Text = _Needle2.ToString();
+
+            if (SendCount > 100)
+            {
+                tbSendData.Clear();
+                tbReceiveData.Clear();
+                SendCount = 0;
+            }
+            SendCount++;
         }
         public void SerialCommunication(object o)
         {
@@ -182,10 +187,9 @@ namespace InkjetPrinter
             PumpPort.DiscardInBuffer();
             PumpPort.DiscardOutBuffer();
             PumpPort.Write(command);
-            Thread.Sleep(20);
+            Thread.Sleep(50);
             DataReceived();
         }
-
         private void ReadPumpPortXml()
         {
             try
@@ -235,82 +239,87 @@ namespace InkjetPrinter
                 MessageBox.Show(e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         public void DataReceived()
         {
-            Byte[] buffer = new Byte[64];
-            Byte[] data;
-            int Length = PumpPort.Read(buffer, 0, buffer.Length);
-            data = new Byte[Length];
-            switch (count)
+            try
             {
-                case 0:
-                    //Command mode result
-                    break;
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 6:
-                case 7:
-                case 8:
-                case 9:
-                    //check position status
-                    if (Length > 5)
-                    {
-                        if (buffer[0] == 47 && buffer[1] == 48 && buffer[Length - 2] == 13 && buffer[Length - 1] == 10)
-                            for (int i = 2; i < Length - 3; i++)
+                Byte[] buffer = new Byte[1024];
+                Byte[] data;
+                int Length = PumpPort.Read(buffer, 0, buffer.Length);
+                data = new Byte[Length];
+                switch (count)
+                {
+                    case 0:
+                        //Command mode result
+                        break;
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                        //check position status
+                        if (Length > 5)
+                        {
+                            if (buffer[0] == 47 && buffer[1] == 48 && buffer[Length - 2] == 13 && buffer[Length - 1] == 10)
+                                for (int i = 3; i < Length - 4; i++)
+                                {
+                                    data[i - 2] = buffer[i];
+                                }
+                            try
                             {
-                                data[i - 2] = buffer[i];
+                                Plunger = int.Parse(Encoding.Default.GetString(data));
                             }
-                        try
-                        {
-                            Plunger = int.Parse(Encoding.Default.GetString(data));
-                        }
-                        catch (Exception ex)
-                        {
-                            //TODO: write log
-                        }
-                    }
-                    break;
-                case 5:
-                    //check valve status
-                    if (Length > 5)
-                    {
-                        if (buffer[0] == 47 && buffer[1] == 48 && buffer[Length - 2] == 13 && buffer[Length - 1] == 10)
-                            for (int i = 2; i < Length - 3; i++)
+                            catch (Exception ex)
                             {
-                                data[i - 2] = buffer[i];
+                                //TODO: write log
                             }
-                        try
-                        {
-                            Valve = int.Parse(Encoding.Default.GetString(data));
                         }
-                        catch (Exception ex)
+                        break;
+                    case 5:
+                        //check valve status
+                        if (Length > 5)
                         {
-                            //TODO: write log
+                            if (buffer[0] == 47 && buffer[1] == 48 && buffer[Length - 2] == 13 && buffer[Length - 1] == 10)
+                                for (int i = 3; i < Length - 4; i++)
+                                {
+                                    data[i - 2] = buffer[i];
+                                }
+                            try
+                            {
+                                Valve = int.Parse(Encoding.Default.GetString(data));
+                            }
+                            catch (Exception ex)
+                            {
+                                //TODO: write log
+                            }
                         }
-                    }
-                    break;
-                case 10:
-                    //check pump status
-                    if (Length > 5)
-                    {
-                        if (buffer[0] == 47 && buffer[1] == 48 && buffer[Length - 2] == 13 && buffer[Length - 1] == 10)
+                        break;
+                    case 10:
+                        //check pump status
+                        if (Length > 5)
                         {
-                            Pump = buffer[2];
+                            if (buffer[0] == 47 && buffer[1] == 48 && buffer[Length - 2] == 13 && buffer[Length - 1] == 10)
+                            {
+                                Pump = buffer[2];
+                            }
                         }
-                    }
-                    break;
-                default:
-                    break;
+                        break;
+                    default:
+                        break;
+                }
+                //display data to textbox
+
+                Display d = new Display(DisplayReceiveData);
+                this.Invoke(d, Encoding.Default.GetString(buffer) + "(" + Length.ToString() + ")");
             }
-            //display data to textbox
-
-            Display d = new Display(DisplayReceiveData);
-            this.Invoke(d, Encoding.Default.GetString(buffer));
+            catch(Exception e)
+            {
+                //MessageBox.Show(e.ToString());
+            }
         }
-
         public void DisplayReceiveData(string str)
         {
             tbReceiveData.Text += str;
@@ -767,26 +776,33 @@ namespace InkjetPrinter
         }
         private void btnPlunger_Click(object sender, EventArgs e)
         {
-            Command = "/1V";
-            if (PlungerMove > Plunger)
-                Command += PipeInVel.ToString();
-            else
-                Command += PipeOutVel.ToString();
+            if (!Cycle_Pipe)
+            {
+                Command = "/1V";
+                if (PlungerMove > Plunger)
+                    Command += PipeInVel.ToString();
+                else
+                    Command += PipeOutVel.ToString();
 
-            Command += "A" + PlungerMove.ToString() + "R" + '\u000D';
-            count = -1;
+                Command += "A" + PlungerMove.ToString() + "R" + '\u000D';
+                count = -1;
+            }            
         }
 
         private void btnValve_Click(object sender, EventArgs e)
         {
-            Command = "/1I" + Convert.ToString(cbValve.SelectedIndex + 1) + "R" + '\u000D';
-            count = -1;
+            if (!Cycle_Pipe)
+            {
+                Command = "/1I" + Convert.ToString(cbValve.SelectedIndex + 1) + "R" + '\u000D';
+                count = -1;
+            }            
         }
 
         private void btnPumpInit_Click(object sender, EventArgs e)
         {
             Needle1 = 0;
             Needle2 = 0;
+            Cycle_Pipe = false;
             Command = "/1ZR" + '\u000D';
             count = -1;
         }
@@ -798,30 +814,43 @@ namespace InkjetPrinter
 
         private void btnNeedle1PipeIn_Click(object sender, EventArgs e)
         {
-            Cycle_Pipe = true;
-            Thread Needle1PipeIn = new Thread(Needle1PipeInCycle);
-            Needle1PipeIn.Start();
+            if (!Cycle_Pipe)
+            {
+                Cycle_Pipe = true;
+                Thread Needle1PipeIn = new Thread(Needle1PipeInCycle);
+                Needle1PipeIn.Start();
+            }
+            
         }
 
         private void btnNeedle1PipeOut_Click(object sender, EventArgs e)
         {
-            Cycle_Pipe = true;
-            Thread Needle1PipeOut = new Thread(Needle1PipeOutCycle);
-            Needle1PipeOut.Start();
+            if (!Cycle_Pipe)
+            {
+                Cycle_Pipe = true;
+                Thread Needle1PipeOut = new Thread(Needle1PipeOutCycle);
+                Needle1PipeOut.Start();
+            }            
         }
 
         private void btnNeedle2PipeIn_Click(object sender, EventArgs e)
         {
-            Cycle_Pipe = true;
-            Thread Needle2PipeIn = new Thread(Needle2PipeInCycle);
-            Needle2PipeIn.Start();
+            if (!Cycle_Pipe)
+            {
+                Cycle_Pipe = true;
+                Thread Needle2PipeIn = new Thread(Needle2PipeInCycle);
+                Needle2PipeIn.Start();
+            }            
         }
 
         private void btnNeedle2PipeOut_Click(object sender, EventArgs e)
         {
-            Cycle_Pipe = true;
-            Thread Needle2PipeOut = new Thread(Needle2PipeOutCycle);
-            Needle2PipeOut.Start();
+            if (!Cycle_Pipe)
+            {
+                Cycle_Pipe = true;
+                Thread Needle2PipeOut = new Thread(Needle2PipeOutCycle);
+                Needle2PipeOut.Start();
+            }            
         }
 
         private void tbSendData_TextChanged(object sender, EventArgs e)
