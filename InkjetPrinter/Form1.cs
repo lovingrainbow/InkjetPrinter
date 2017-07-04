@@ -18,6 +18,7 @@ using Modbus.Device;
 using Modbus.Utility;
 using FtdAdapter;
 using System.Threading;
+using System.IO;
 
 namespace InkjetPrinter
 {
@@ -30,7 +31,7 @@ namespace InkjetPrinter
         IntPtr Device_Hand = IntPtr.Zero;
         string pMotionDevCfg = @"C:\Users\nthu\Desktop\UI\UI\bin\Debug\MotionDev.cfg";
         IntPtr[] axis_Hand = new IntPtr[4];
-        Axis[] axis = new Axis[3]; 
+        Axis[] axis = new Axis[3];
         Axis.AxisPara[] axisPara = new Axis.AxisPara[3];
         AxisUserControl[] axisUI = new AxisUserControl[3];
 
@@ -39,13 +40,11 @@ namespace InkjetPrinter
         DataTable dtPoint;
         int dataCount;
 
-        bool RunPointStart = false;
-        int RunPointStep = 0;
         int RunPointIndex;
-        BackgroundWorker RunPointWork;
         Point _MachinePoint = new Point();
         Point _SoftwarePoint = new Point();
         Point[] _RunPoint = new Point[3];
+        Point Point_AutoCycle = new Point();
         PointConverter _PointConverter = new PointConverter();
 
         //Camera variable
@@ -53,38 +52,36 @@ namespace InkjetPrinter
         Bitmap bitmap;
         private PixelDataConverter converter = new PixelDataConverter();
         private Stopwatch stopWatch = new Stopwatch();
+        string PhotoDir = "E:\\";
 
         //Modbus Port
         SerialPort ModbusPort = new SerialPort();
         IModbusSerialMaster ModbusMaster;
         byte slaveId = 1;
-        ushort startAddress;
-        ushort numRegisters = 1;
         bool heaterState = false;
         ushort[] temperature;
         double heaterTemp;
         BackgroundWorker ModbusPollingWork = new BackgroundWorker();
         //Pump Port
-        PumpDriver pumpDriver = new PumpDriver();
-        int PumpPipeInVel;
-        int PumpPipeOutVel;
-        int Needle1Volume;
-        int Needle2Volume;
-        int Needle1PipeInVolume;
-        int Needle1PipeOutVolume;
-        int Needle2PipeInVolume;
-        int Needle2PipeOutVolume;
+        SerialPort PumpPort = new SerialPort();
+        //Auto Cycle
+        bool Cycle_Auto;
+
+
 
 
         public InkJetPrinter()
         {
             InitializeComponent();
-            
+
             ReadAxisXml();
-            
+
         }
         private void Form1_Load(object sender, EventArgs e)
         {
+            //create file dir
+            PhotoDir += DateTime.Now.ToString("yyyyMMddHHmm");
+            Directory.CreateDirectory(PhotoDir);
             //open PCI board
             OpenMotionCard();
             //load AxisUI
@@ -104,10 +101,12 @@ namespace InkjetPrinter
             ModbusPollingWork.DoWork += ModbusPollingWork_DoWork;
             ModbusPollingWork.RunWorkerAsync();
             //Init Serial Port for pump
-
+            ReadPumpPortXml();
+            UCPump.PumpPort = this.PumpPort;
+            ReadPumpParaXml();
 
             //Enable Refresh Timer
-            Timer_100ms.Interval = 100;
+            Timer_100ms.Interval = 200;
             Timer_100ms.Tick += Timer_100ms_Tick;
             Timer_100ms.Enabled = true;
             //Init Datagridview Table
@@ -123,9 +122,6 @@ namespace InkjetPrinter
             //DGPoint.Columns[2].Width = 100;
             //DGPoint.Columns[3].Width = 100;
             //Init BackgroundWorker
-            RunPointWork = new BackgroundWorker();
-            RunPointWork.DoWork += RunPointWork_DoWork;
-            RunPointWork.RunWorkerAsync();
             //Init RunPointData
             for (int i = 0; i < _RunPoint.Length; i++)
             {
@@ -218,16 +214,16 @@ namespace InkjetPrinter
                 {
                     Log.ErrorLog(ex.ToString(), 0);
                 }
-             
+
             }
             //Refresh PumpStatus
-            pumpDriver.Refresh();
+            UCPump.RefreshPumpUI();
             //Refresh Point Data
             _MachinePoint.X = axis[0].Para.CurCmd;
             _MachinePoint.Y = axis[1].Para.CurCmd;
             _MachinePoint.Z = axis[2].Para.CurCmd;
             _SoftwarePoint = Coordiante.CoordinateConveter(_MachinePoint, _PointConverter);
-            
+
             switch (tcMain.SelectedTab.Name)
             {
                 case "MotorPage":
@@ -278,20 +274,13 @@ namespace InkjetPrinter
                             btnRunSample3_3.Enabled = true;
                             btnRunSample4_3.Enabled = true;
                         }
-                        //Valve UI Refresh
-                        lbValve.Text = pumpDriver.ValvePosition.ToString();
-                        lbSyrangePosition.Text = pumpDriver.PlungerPosition.ToString();
-                        //Needle1& Needle2 Volume
-                        lbNeedle1Volume.Text = Needle1Volume.ToString();
-                        lbNeedle2Volume.Text = Needle2Volume.ToString();
-
                         break;
                     }
                 default:
                     break;
             }
-            
-            if (RunPointStart)
+
+            if (Cycle_Auto)
             {
                 for (int i = 0; i < axis.Length; i++)
                 {
@@ -377,11 +366,11 @@ namespace InkjetPrinter
             XmlElement root = doc.DocumentElement;
             // select single xmlnode            
             // parse innertext to parameter
-            for(int i = 0; i < axis.Length; i++)
+            for (int i = 0; i < axis.Length; i++)
             {
                 axisPara[i] = new Axis.AxisPara();
                 string node = "";
-                switch(i)
+                switch (i)
                 {
                     case 0:
                         node += "AxisX";
@@ -423,12 +412,12 @@ namespace InkjetPrinter
                     axisPara[i].Sample3 = double.Parse(root.SelectSingleNode(node + "/Sample3").InnerText);
                     axisPara[i].Sample4 = double.Parse(root.SelectSingleNode(node + "/Sample4").InnerText);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Log.ErrorLog(e.ToString(), 0);
                     MessageBox.Show(e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                
+
             }
         }
         private void ReadModbusPortXml()
@@ -446,7 +435,7 @@ namespace InkjetPrinter
                 ModbusPort.PortName = root.SelectSingleNode("device").InnerText;
                 ModbusPort.BaudRate = int.Parse(root.SelectSingleNode("BaudRate").InnerText);
                 ModbusPort.DataBits = int.Parse(root.SelectSingleNode("DataBits").InnerText);
-                switch(root.SelectSingleNode("Parity").InnerText)
+                switch (root.SelectSingleNode("Parity").InnerText)
                 {
                     case "Even":
                         ModbusPort.Parity = Parity.Even;
@@ -460,7 +449,7 @@ namespace InkjetPrinter
                     default:
                         break;
                 }
-                switch(root.SelectSingleNode("StopBits").InnerText)
+                switch (root.SelectSingleNode("StopBits").InnerText)
                 {
                     case "One":
                         ModbusPort.StopBits = StopBits.One;
@@ -477,30 +466,117 @@ namespace InkjetPrinter
                 ModbusPort.Open();
                 ModbusMaster = ModbusSerialMaster.CreateAscii(ModbusPort);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.ErrorLog(e.ToString(), 0);
                 MessageBox.Show(e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void ReadPumpPortXml()
         {
-            //Close Temperature controller
-            //Close Modbus Port
-            /*
             try
             {
-                ModbusMaster.WriteSingleCoil(slaveId, 2068, false);
+                // Create xml document
+                XmlDocument doc = new XmlDocument();
+                // Load xml document
+                doc.Load("PumpPort.xml");
+                XmlElement root = doc.DocumentElement;
+                // select single xmlnode            
+                // parse innertext to parameter
+                //Read modbusport protocols
+                PumpPort.PortName = root.SelectSingleNode("device").InnerText;
+                PumpPort.BaudRate = int.Parse(root.SelectSingleNode("BaudRate").InnerText);
+                PumpPort.DataBits = int.Parse(root.SelectSingleNode("DataBits").InnerText);
+                switch (root.SelectSingleNode("Parity").InnerText)
+                {
+                    case "Even":
+                        PumpPort.Parity = Parity.Even;
+                        break;
+                    case "Odd":
+                        PumpPort.Parity = Parity.Odd;
+                        break;
+                    case "None":
+                        PumpPort.Parity = Parity.None;
+                        break;
+                    default:
+                        break;
+                }
+                switch (root.SelectSingleNode("StopBits").InnerText)
+                {
+                    case "One":
+                        PumpPort.StopBits = StopBits.One;
+                        break;
+                    case "Two":
+                        PumpPort.StopBits = StopBits.Two;
+                        break;
+                    case "None":
+                        PumpPort.StopBits = StopBits.None;
+                        break;
+                    default:
+                        break;
+                }
+                PumpPort.Open();
             }
-            catch(Exception ex)
+            catch (Exception e)
             {
-                Log.ErrorLog(ex.ToString(), 0);
+                MessageBox.Show(e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            */
-            ModbusPort.Close();
+        }
+
+        public void ReadPumpParaXml()
+        {
+            try
+            {
+                // Create xml document
+                XmlDocument doc = new XmlDocument();
+                // Load xml document
+                doc.Load("PumpPara.xml");
+                XmlElement root = doc.DocumentElement;
+                // select single xmlnode            
+                // parse innertext to parameter
+                //Read pump para
+                UCPump.PipeInVel = int.Parse(root.SelectSingleNode("PipeInVel").InnerText);
+                UCPump.PipeOutVel = int.Parse(root.SelectSingleNode("PipeOutVel").InnerText);
+                UCPump.Needle1Pipe = int.Parse(root.SelectSingleNode("Needle1Pipe").InnerText);
+                UCPump.Needle2Pipe = int.Parse(root.SelectSingleNode("Needle2Pipe").InnerText);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+        public void SavePumpParaXml()
+        {
+            // Create xml document
+            XmlDocument doc = new XmlDocument();
+            XmlElement root = doc.CreateElement("PumpPara");
+            doc.AppendChild(root);
+
+            XmlElement PipeInVel = doc.CreateElement("PipeInVel");
+            PipeInVel.InnerText = UCPump.PipeInVel.ToString();
+            root.AppendChild(PipeInVel);
+
+            XmlElement PipeOutVel = doc.CreateElement("PipeOutVel");
+            PipeOutVel.InnerText = UCPump.PipeOutVel.ToString();
+            root.AppendChild(PipeOutVel);
+
+            XmlElement Needle1Pipe = doc.CreateElement("Needle1Pipe");
+            Needle1Pipe.InnerText = UCPump.Needle1Pipe.ToString();
+            root.AppendChild(Needle1Pipe);
+
+            XmlElement Needle2Pipe = doc.CreateElement("Needle2Pipe");
+            Needle2Pipe.InnerText = UCPump.Needle2Pipe.ToString();
+            root.AppendChild(Needle2Pipe);
+            // save xml file
+            doc.Save("PumpPara.xml");
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
             //Check Motor Stop, if no cancel close
-            if (!axis[0].IO.RUN && !axis[1].IO.RUN && !axis[2].IO.RUN )
+            if (!axis[0].IO.RUN && !axis[1].IO.RUN && !axis[2].IO.RUN)
             {
                 for (int i = 0; i < axis.Length; i++)
                 {
@@ -518,9 +594,25 @@ namespace InkjetPrinter
             Log.log("Set D0 OFF.");
             if (Result != (uint)ErrorCode.SUCCESS)
                 Log.ErrorLog("Set D0 OFF", (int)Result);
+
+            //Close Temperature controller
+            //Close Modbus Port
+            /*
+            try
+            {
+                ModbusMaster.WriteSingleCoil(slaveId, 2068, false);
+            }
+            catch(Exception ex)
+            {
+                Log.ErrorLog(ex.ToString(), 0);
+            }
+            */
+            ModbusPort.Close();
             //Stop Pump
             //Stop Pump Port
-            pumpDriver.ClosePump();
+            UCPump.Stop();
+            PumpPort.Close();
+            SavePumpParaXml();
             //Close Camera
             DestroyCamera();
             //save parameter
@@ -670,7 +762,7 @@ namespace InkjetPrinter
                 string[] data_col = null;
                 int x = 0;
                 dtPoint.Clear();
-                foreach(string text_line in row_text)
+                foreach (string text_line in row_text)
                 {
                     data_col = text_line.Split(',');
                     if (x == 0)
@@ -683,11 +775,11 @@ namespace InkjetPrinter
                         {
                             dtPoint.Rows.Add(data_col);
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
                             Log.ErrorLog(e.ToString(), 0);
                         }
-                        
+
                     }
 
                 }
@@ -698,6 +790,7 @@ namespace InkjetPrinter
         private void btnOpenCSV_Click(object sender, EventArgs e)
         {
             OpenPointData();
+            btnRunPoint.Enabled = true;
         }
 
         private void btnRunPoint_Click(object sender, EventArgs e)
@@ -705,57 +798,154 @@ namespace InkjetPrinter
             //Start Running
             //1.Check Point Data
             //2.If data OK, then Start Run
-            RunPointIndex = DGPoint.CurrentCell.RowIndex;
-            RunPointStart = true;
+            if (dtPoint.Rows.Count > 0)
+            {
+                RunPointIndex = DGPoint.CurrentCell.RowIndex;
+                Cycle_Auto = true;
+                Thread AutoThread = new Thread(AutoCycle);
+                AutoThread.Start();
+                //disable ui
+                ButtonControl(false);
+            }
+            
 
         }
 
-        private void RunPoint()
+        private void AutoCycle()
         {
-            //create a runpoint buffer
-            Point _RunPointBuffer = new Point();
+            int step = 0;
+            //camera open
 
-            while(RunPointStart)
+            //AutoCycle
+            while(Cycle_Auto)
             {
-                switch(RunPointStep)
+                switch(step)
                 {
                     case 0:
-                        //1.load point data, then start run
-                        //
-                        double x, y;
-                        x = (double)dtPoint.Rows[RunPointIndex]["X"] * 1000;
-                        y = (double)dtPoint.Rows[RunPointIndex]["Y"] * 1000;
-                        
-                        for (int i = 0; i < axis.Length; i++ )
                         {
-                            axis[i].bMoveDone = false;
-                        }
-                        axis[0].MoveAbs(x);
-                        axis[1].MoveAbs(y);
-                        RunPointStep++;
-                        break;
-                    case 1:
-                        //2.wait axis stop, and stop cycle
-                        if (axis[0].bMoveDone && axis[1].bMoveDone && axis[2].bMoveDone)
-                        {
-                            //Run next point
-                            //if the point is the end of data, then stop
-                            RunPointIndex++;
-                            if (RunPointIndex >= dataCount)
+                            //Check Pump Enable
+                            if (cbPumpEnable.Checked)
                             {
-                                RunPointStart = false;
-                                RunPointStep = 0;
+                                step = 1;
                             }
                             else
                             {
-                                MethodInvoker miUpdate = new MethodInvoker(this.UpdateDataGirdViewSelect);
-                                this.BeginInvoke(miUpdate, null);
-                                System.Threading.Thread.Sleep(1000);
-                                RunPointStep = 0;
-                            }   
+                                step = 3;
+                            }
+                            break;
+                        }                        
+                    case 1:
+                        {
+                            //Check Needle
+                            int needle = (int)dtPoint.Rows[RunPointIndex]["Needle"];
+                            Point_AutoCycle.X = (double)dtPoint.Rows[RunPointIndex]["X"] * 1000;
+                            Point_AutoCycle.Y = (double)dtPoint.Rows[RunPointIndex]["Y"] * 1000;
+                            Point_AutoCycle.Z = 0;
+                            Point_AutoCycle = Coordiante.ReverseCoordinateConveter(Point_AutoCycle, _PointConverter);
+                            if (needle == 1)
+                            {
+                                
+                                Point_AutoCycle.X += axis[0].Para.Needle1;
+                                Point_AutoCycle.Y += axis[1].Para.Needle1;
+                                Point_AutoCycle.Z = axis[2].Para.Needle1 - _PointConverter.dZ;
+                                for (int i = 0; i < axis.Length; i++)
+                                {
+                                    axis[i].bMoveDone = false;
+                                }
+                                axis[0].MoveAbs(Point_AutoCycle.X);
+                                axis[1].MoveAbs(Point_AutoCycle.Y);
+                                axis[2].MoveAbs(Point_AutoCycle.Z);
+                                step++;
+                            }
+                            else if (needle == 2)
+                            {
+                                Point_AutoCycle.X += axis[0].Para.Needle2;
+                                Point_AutoCycle.Y += axis[1].Para.Needle2;
+                                Point_AutoCycle.Z = axis[2].Para.Needle2 - _PointConverter.dZ;
+                                for (int i = 0; i < axis.Length; i++)
+                                {
+                                    axis[i].bMoveDone = false;
+                                }
+                                axis[0].MoveAbs(Point_AutoCycle.X);
+                                axis[1].MoveAbs(Point_AutoCycle.Y);
+                                axis[2].MoveAbs(Point_AutoCycle.Z);
+                                step++;
+                            }
+                            else
+                            {
+                                RunPointIndex++;
+                            }
+                            break;
+                        }                        
+                    case 2:
+                        {
+                            //wait axis stop
+                            if (axis[0].bMoveDone && axis[1].bMoveDone && axis[2].bMoveDone)
+                            {
+                                Thread.Sleep(1000);
+                                int needle = (int)dtPoint.Rows[RunPointIndex]["Needle"];
+                                UCPump.AutoCycle(needle);
+                                step++;
+                            }
+                            break;
                         }
-                        break;
+                    case 3:
+                        {
+                            //wait pump stop
+                            if (!UCPump.Cycle_Pipe)
+                            {
+                                Point_AutoCycle.X = (double)dtPoint.Rows[RunPointIndex]["X"] * 1000;
+                                Point_AutoCycle.Y = (double)dtPoint.Rows[RunPointIndex]["Y"] * 1000;
+                                Point_AutoCycle.Z = axis[2].Para.Camera - _PointConverter.dZ;
+                                Point_AutoCycle = Coordiante.ReverseCoordinateConveter(Point_AutoCycle, _PointConverter);
+                                for (int i = 0; i < axis.Length; i++)
+                                {
+                                    axis[i].bMoveDone = false;
+                                }
+                                axis[0].MoveAbs(Point_AutoCycle.X);
+                                axis[1].MoveAbs(Point_AutoCycle.Y);
+                                axis[2].MoveAbs(Point_AutoCycle.Z);
+                                step++;
+                            }
+                            break;
+                        }
+                    case 4:
+                        {
+                            //wait axis stop
+                            if (axis[0].bMoveDone && axis[1].bMoveDone && axis[2].bMoveDone)
+                            {
+                                Thread.Sleep(1000);
+                                if (cbCameraEnable.Checked)
+                                {
+                                    //Take photo                           
+                                    Thread.Sleep(2000);
+                                    OneShoot();
+                                    string PhotoName = PhotoDir + '\\' + DateTime.Now.ToString("HHmmss_") + RunPointIndex + ".bmp";
+                                    Thread.Sleep(1000);
+                                    bitmap.Save(PhotoName);
+                                }
+
+                                RunPointIndex++;
+                                if (RunPointIndex >= dataCount)
+                                {
+                                    MethodInvoker CycleStop = new MethodInvoker(CycleStopRefresh);
+                                    BeginInvoke(CycleStop, null);
+                                    Cycle_Auto = false;
+                                    step = 0;
+                                }
+                                else
+                                {
+                                    MethodInvoker miUpdate = new MethodInvoker(this.UpdateDataGirdViewSelect);
+                                    this.BeginInvoke(miUpdate, null);
+                                    step = 0;
+
+                                }
+
+                            }
+                            break;
+                        }
                     default:
+                        Cycle_Auto = false;
                         break;
                 }
             }
@@ -765,14 +955,11 @@ namespace InkjetPrinter
         {
             DGPoint.CurrentCell = DGPoint[0, RunPointIndex];
         }
-
-        private void RunPointWork_DoWork(object sender, DoWorkEventArgs e)
+        private void CycleStopRefresh()
         {
-            while(true)
-            {
-                RunPoint();
-            }
+            ButtonControl(true);
         }
+
         private void ModbusPollingWork_DoWork(object sender, DoWorkEventArgs e)
         {
             while (ModbusPort.IsOpen)
@@ -786,19 +973,32 @@ namespace InkjetPrinter
                 {
                     Log.ErrorLog(ex.ToString(), 0);
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(1000);
             }
         }
-        
 
+        public void ButtonControl(bool Control)
+        {
+            //enable ui
+            UCPump.ButtonControl(Control);
+            btnOneShoot.Enabled = Control;
+            btnContinuousShoot.Enabled = Control;
+            btnSavePhoto.Enabled = Control;
+            btnRunPoint.Enabled = Control;
+            btnOpenCSV.Enabled = Control;
+        }
         private void btnStop_Click(object sender, EventArgs e)
         {
-            RunPointStart = false;
-            RunPointStep = 0;
-            for(int i = 0; i < axis.Length; i++)
+            //Cycle Stop
+            Cycle_Auto = false;
+            //Pump Stop            
+            UCPump.Stop();
+            for (int i = 0; i < axis.Length; i++)
             {
                 axis[i].StopDec();
             }
+            //Button Enable
+            ButtonControl(true);
         }
         private void int_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -838,14 +1038,14 @@ namespace InkjetPrinter
 
             Point _RunPointBuffer = new Point();
 
-            switch(btn.Name)
+            switch (btn.Name)
             {
                 case "btnRun_1":
                     {
                         //Check which device select
                         //1.camera don't change any point
                         //2.needle1 or needle2 change point position
-                        _RunPointBuffer = _RunPoint[0].GetPoint();               
+                        _RunPointBuffer = _RunPoint[0].GetPoint();
                         if (rbtnNeedle1_1.Checked)
                         {
                             _RunPointBuffer.X += axis[0].Para.Needle1;
@@ -855,7 +1055,7 @@ namespace InkjetPrinter
                         {
                             _RunPointBuffer.X += axis[0].Para.Needle2;
                             _RunPointBuffer.Y += axis[1].Para.Needle2;
-                        }    
+                        }
                         break;
                     }
                 case "btnRun_2":
@@ -1090,7 +1290,7 @@ namespace InkjetPrinter
         private void btnORGSet_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            switch(btn.Name)
+            switch (btn.Name)
             {
                 case "btnORGXY_2":
                 case "btnORGXY_3":
@@ -1121,7 +1321,7 @@ namespace InkjetPrinter
                     }
                 default:
                     break;
-            }    
+            }
 
         }
 
@@ -1157,18 +1357,18 @@ namespace InkjetPrinter
                         tbPointZ_3.Text = Para2Text(_RunPoint[2].Z);
                         tbJogVelX.Text = Para2Text(axis[0].Para.JogVel);
                         tbJogVelY.Text = Para2Text(axis[1].Para.JogVel);
-                        tbJogVelZ.Text = Para2Text(axis[2].Para.JogVel); 
+                        tbJogVelZ.Text = Para2Text(axis[2].Para.JogVel);
                         break;
                     }
                 default:
                     break;
-            }   
+            }
         }
 
         private void JogVel_TextChanged(object sender, EventArgs e)
         {
             TextBox tb = (TextBox)sender;
-            switch(tb.Name)
+            switch (tb.Name)
             {
                 case "tbJogVelX":
                     {
@@ -1289,79 +1489,6 @@ namespace InkjetPrinter
             }
         }
 
-        private void PumpPara_TextChanged(object sender, EventArgs e)
-        {
-            //Make sure textbox
-            TextBox tb = (TextBox)sender;
-            //check textbox
-            switch(tb.Name)
-            {
-                case "tbSyrangePipeInOut":
-                    if (int.Parse(tb.Text) > 48000)
-                    {
-                        tb.Text = "48000";
-                    }                        
-                    break;
-                case "tbNeedle1PipeIn":
-                    //Needle1 PipeIn Data
-                    if (tb.Text.Length > 0)
-                        Needle1PipeInVolume = int.Parse(tb.Text);
-                    break;
-                case "tbNeedle1PipeOut":
-                    //Needle1 PipeOut Data
-                    if (tb.Text.Length > 0)
-                        Needle1PipeOutVolume = int.Parse(tb.Text);
-                    break;
-                case "tbNeedle2PipeIn":
-                    //Needle2 PipeIn Data
-                    if (tb.Text.Length > 0)
-                        Needle2PipeInVolume = int.Parse(tb.Text);
-                    break;
-                case "tbNeedle2PipeOut":
-                    //Needle2 PipeOut Data
-                    if (tb.Text.Length > 0)
-                        Needle2PipeOutVolume = int.Parse(tb.Text);
-                    break;
-                case "tbPumpPipeInVel":
-                    //PipeIn Vel
-                    if (tb.Text.Length > 0)
-                    {
-                        if (int.Parse(tb.Text) > 6000)
-                        {
-                            tb.Text = "6000";
-                            PumpPipeInVel = 6000;
-                        }
-                        else
-                            PumpPipeInVel = int.Parse(tb.Text);
-                    }
-                    else
-                    {
-                        PumpPipeInVel = 0;
-                    }
-                        
-
-                    break;
-                case "tbPumpPipeOutVel":
-                    //PipeOut Vel
-                    if (tb.Text.Length > 0)
-                    {
-                        if (int.Parse(tb.Text) > 6000)
-                        {
-                            tb.Text = "6000";
-                            PumpPipeOutVel = 6000;
-                        }
-                        else
-                            PumpPipeOutVel = int.Parse(tb.Text);
-                    }
-                    else
-                    {
-                        PumpPipeOutVel = 0;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
         private void btnJog_MouseDown(object sender, MouseEventArgs e)
         {
             Button btn = (Button)sender;
@@ -1438,7 +1565,7 @@ namespace InkjetPrinter
                 int picBoxHeight = pbCamera.Size.Height;
                 int halfWidth = pbCamera.Size.Width / 2;
                 int halfHeight = pbCamera.Size.Height / 2;
-                Graphics objGraphic = e.Graphics; 
+                Graphics objGraphic = e.Graphics;
                 Pen pen = new Pen(Color.Blue, 3);
                 //Draw line point create
                 Point[] DrawPoint = new Point[4];
@@ -1494,7 +1621,7 @@ namespace InkjetPrinter
                 camera.StreamGrabber.ImageGrabbed += OnImageGrabbed;
                 camera.StreamGrabber.GrabStopped += OnGrabStopped;
                 // Open the connection to the camera device.
-                camera.Open();                
+                camera.Open();
             }
             catch (Exception e)
             {
@@ -1764,9 +1891,9 @@ namespace InkjetPrinter
                     heaterState = true;
                 }
 
-                
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.ErrorLog(ex.ToString(), 0);
             }
@@ -1774,71 +1901,9 @@ namespace InkjetPrinter
 
         private void btnErrorReset_Click(object sender, EventArgs e)
         {
-            for(int i = 0; i < axis.Length; i++)
+            for (int i = 0; i < axis.Length; i++)
             {
                 axis[i].ErrorReset();
-            }
-        }
-
-        private void btnPump_Click(object sender, EventArgs e)
-        {
-            Button btn = (Button)sender;
-            //Check which button click
-            switch(btn.Name)
-            {
-                case "btnPumpInit":
-                    //Pump Initalize
-                    pumpDriver.PumpInitialize();
-                    break;
-                case "btnNeedle1PipeIn":
-                    //Needle1PipeIn Action
-                    pumpDriver.PipeInOut(Needle1PipeInVolume, PumpPipeInVel, 2);                    
-                    break;
-                case "btnNeedle1PipeOut":
-                    //Needle1PipeOut Action
-                    pumpDriver.PipeInOut(Needle1PipeOutVolume, PumpPipeOutVel, 2);
-                    break;
-                case "btnNeedle2PipeIn":
-                    //Needle2PipeIn Action
-                    pumpDriver.PipeInOut(Needle2PipeInVolume, PumpPipeInVel, 3);
-                    break;
-                case "btnNeedle2PipeOut":
-                    //Needle2PipeOut Action
-                    pumpDriver.PipeInOut(Needle2PipeInVolume, PumpPipeOutVel, 3);
-                    break;
-                case "btnSyrangePipeInOut":
-                    //TODO: SyrangePipeInOut Action
-                    break;
-                case "btnValve1":
-                    //Valve to Valve1
-                    pumpDriver.ValveMove(1);
-                    break;
-                case "btnValve2":
-                    //Valve to Valve2
-                    MessageBox.Show(btn.Name);
-                    //pumpDriver.ValveMove(2);
-                    break;
-                case "btnValve3":
-                    //Valve to Valve3
-                    pumpDriver.ValveMove(3);
-                    break;
-                case "btnValve4":
-                    //Valve to Valve4
-                    MessageBox.Show(btn.Name);
-                    //pumpDriver.ValveMove(4);
-                    break;
-                case "btnValve5":
-                    //Valve to valve5
-                    pumpDriver.ValveMove(5);
-                    break;
-                case "btnValve6":
-                    pumpDriver.ValveMove(6);
-                    break;
-                case "btnPumpStop":
-                    pumpDriver.Pumpstop();
-                    break;
-                default:
-                    break;
             }
         }
     }
