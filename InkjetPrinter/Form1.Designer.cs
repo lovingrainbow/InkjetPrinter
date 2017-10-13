@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InkJetPrinter));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tcMain = new System.Windows.Forms.TabControl();
             this.ControlPage = new System.Windows.Forms.TabPage();
             this.UCPump = new InkjetPrinter.PumpUserControl();
@@ -48,13 +48,14 @@
             this.btnOpenCSV = new System.Windows.Forms.Button();
             this.DGPoint = new System.Windows.Forms.DataGridView();
             this.gbAxis = new System.Windows.Forms.GroupBox();
+            this.btnStageInit = new System.Windows.Forms.Button();
             this.btnErrorReset = new System.Windows.Forms.Button();
             this.lbStageStatus = new System.Windows.Forms.Label();
             this.lbStageStatusTitle = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnRunSample4_3 = new System.Windows.Forms.Button();
+            this.btnNeedleJet_3 = new System.Windows.Forms.Button();
             this.tbORGZ_3 = new System.Windows.Forms.TextBox();
-            this.btnRunSample3_3 = new System.Windows.Forms.Button();
+            this.btnCameraFocus_3 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.btnRunSample2_3 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -81,12 +82,12 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.btnYJogN = new System.Windows.Forms.Button();
             this.btnXJogP = new System.Windows.Forms.Button();
-            this.btnZJogP = new System.Windows.Forms.Button();
-            this.btnXJogN = new System.Windows.Forms.Button();
-            this.btnZJogN = new System.Windows.Forms.Button();
             this.btnYJogP = new System.Windows.Forms.Button();
+            this.btnZJogP = new System.Windows.Forms.Button();
+            this.btnYJogN = new System.Windows.Forms.Button();
+            this.btnZJogN = new System.Windows.Forms.Button();
+            this.btnXJogN = new System.Windows.Forms.Button();
             this.gbCamera = new System.Windows.Forms.GroupBox();
             this.btnSavePhoto = new System.Windows.Forms.Button();
             this.btnStopShoot = new System.Windows.Forms.Button();
@@ -96,8 +97,8 @@
             this.pbCamera = new System.Windows.Forms.PictureBox();
             this.MotorPage = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.btnRunSample4_1 = new System.Windows.Forms.Button();
-            this.btnRunSample3_1 = new System.Windows.Forms.Button();
+            this.btnNeedleJet_1 = new System.Windows.Forms.Button();
+            this.btnCameraFocus_1 = new System.Windows.Forms.Button();
             this.btnRunSample2_1 = new System.Windows.Forms.Button();
             this.btnRunSample1_1 = new System.Windows.Forms.Button();
             this.label16 = new System.Windows.Forms.Label();
@@ -133,16 +134,6 @@
             this.btnORGR_2 = new System.Windows.Forms.Button();
             this.btnORGXY_2 = new System.Windows.Forms.Button();
             this.gpFixedPointData = new System.Windows.Forms.GroupBox();
-            this.btnModifySample4 = new System.Windows.Forms.Button();
-            this.tbSample4Z = new System.Windows.Forms.TextBox();
-            this.tbSample4Y = new System.Windows.Forms.TextBox();
-            this.tbSample4X = new System.Windows.Forms.TextBox();
-            this.lbSample4Title = new System.Windows.Forms.Label();
-            this.btnModifySample3 = new System.Windows.Forms.Button();
-            this.tbSample3Z = new System.Windows.Forms.TextBox();
-            this.tbSample3Y = new System.Windows.Forms.TextBox();
-            this.tbSample3X = new System.Windows.Forms.TextBox();
-            this.lbSample3Title = new System.Windows.Forms.Label();
             this.btnModifySample2 = new System.Windows.Forms.Button();
             this.tbSample2Z = new System.Windows.Forms.TextBox();
             this.tbSample2Y = new System.Windows.Forms.TextBox();
@@ -171,7 +162,7 @@
             this.CameraTitle = new System.Windows.Forms.Label();
             this.Needle2Title = new System.Windows.Forms.Label();
             this.Needle1Title = new System.Windows.Forms.Label();
-            this.CameraPage = new System.Windows.Forms.TabPage();
+            this.btnNeedlePipe_3 = new System.Windows.Forms.Button();
             this.tcMain.SuspendLayout();
             this.ControlPage.SuspendLayout();
             this.gbPointData.SuspendLayout();
@@ -191,8 +182,7 @@
             // 
             this.tcMain.Controls.Add(this.ControlPage);
             this.tcMain.Controls.Add(this.MotorPage);
-            this.tcMain.Controls.Add(this.CameraPage);
-            this.tcMain.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.tcMain.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.tcMain.ItemSize = new System.Drawing.Size(100, 30);
             this.tcMain.Location = new System.Drawing.Point(2, 1);
             this.tcMain.Name = "tcMain";
@@ -220,8 +210,9 @@
             // UCPump
             // 
             this.UCPump.Busy = true;
+            this.UCPump.CleanTime = 0;
             this.UCPump.ErrorCode = 0;
-            this.UCPump.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.UCPump.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.UCPump.Location = new System.Drawing.Point(954, 544);
             this.UCPump.Margin = new System.Windows.Forms.Padding(5);
             this.UCPump.Name = "UCPump";
@@ -285,7 +276,7 @@
             // 
             // tbHeatTemperature
             // 
-            this.tbHeatTemperature.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.tbHeatTemperature.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.tbHeatTemperature.Location = new System.Drawing.Point(145, 60);
             this.tbHeatTemperature.Name = "tbHeatTemperature";
             this.tbHeatTemperature.Size = new System.Drawing.Size(80, 29);
@@ -342,7 +333,7 @@
             // 
             // btnRunPointStop
             // 
-            this.btnRunPointStop.Font = new System.Drawing.Font("Microsoft JhengHei", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnRunPointStop.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnRunPointStop.Image = ((System.Drawing.Image)(resources.GetObject("btnRunPointStop.Image")));
             this.btnRunPointStop.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnRunPointStop.Location = new System.Drawing.Point(650, 440);
@@ -357,7 +348,7 @@
             // btnRunPoint
             // 
             this.btnRunPoint.Enabled = false;
-            this.btnRunPoint.Font = new System.Drawing.Font("Microsoft JhengHei", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnRunPoint.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnRunPoint.Image = ((System.Drawing.Image)(resources.GetObject("btnRunPoint.Image")));
             this.btnRunPoint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnRunPoint.Location = new System.Drawing.Point(650, 360);
@@ -371,7 +362,7 @@
             // 
             // btnOpenCSV
             // 
-            this.btnOpenCSV.Font = new System.Drawing.Font("Microsoft JhengHei", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnOpenCSV.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnOpenCSV.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenCSV.Image")));
             this.btnOpenCSV.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnOpenCSV.Location = new System.Drawing.Point(650, 220);
@@ -387,33 +378,34 @@
             // 
             this.DGPoint.AllowUserToAddRows = false;
             this.DGPoint.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.DGPoint.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.DGPoint.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.DGPoint.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.DGPoint.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.DGPoint.DefaultCellStyle = dataGridViewCellStyle4;
             this.DGPoint.Location = new System.Drawing.Point(20, 30);
             this.DGPoint.Name = "DGPoint";
             this.DGPoint.ReadOnly = true;
-            this.DGPoint.RowHeadersWidth = 40;
+            this.DGPoint.RowHeadersWidth = 60;
             this.DGPoint.RowTemplate.Height = 24;
             this.DGPoint.Size = new System.Drawing.Size(600, 480);
             this.DGPoint.TabIndex = 0;
             // 
             // gbAxis
             // 
+            this.gbAxis.Controls.Add(this.btnStageInit);
             this.gbAxis.Controls.Add(this.btnErrorReset);
             this.gbAxis.Controls.Add(this.lbStageStatus);
             this.gbAxis.Controls.Add(this.lbStageStatusTitle);
@@ -425,18 +417,29 @@
             this.gbAxis.Controls.Add(this.label10);
             this.gbAxis.Controls.Add(this.label9);
             this.gbAxis.Controls.Add(this.label8);
-            this.gbAxis.Controls.Add(this.btnYJogN);
             this.gbAxis.Controls.Add(this.btnXJogP);
-            this.gbAxis.Controls.Add(this.btnZJogP);
-            this.gbAxis.Controls.Add(this.btnXJogN);
-            this.gbAxis.Controls.Add(this.btnZJogN);
             this.gbAxis.Controls.Add(this.btnYJogP);
+            this.gbAxis.Controls.Add(this.btnZJogP);
+            this.gbAxis.Controls.Add(this.btnYJogN);
+            this.gbAxis.Controls.Add(this.btnZJogN);
+            this.gbAxis.Controls.Add(this.btnXJogN);
             this.gbAxis.Location = new System.Drawing.Point(8, 544);
             this.gbAxis.Name = "gbAxis";
             this.gbAxis.Size = new System.Drawing.Size(930, 410);
             this.gbAxis.TabIndex = 7;
             this.gbAxis.TabStop = false;
             this.gbAxis.Text = "Stage Control";
+            // 
+            // btnStageInit
+            // 
+            this.btnStageInit.BackColor = System.Drawing.Color.Lime;
+            this.btnStageInit.Location = new System.Drawing.Point(820, 40);
+            this.btnStageInit.Name = "btnStageInit";
+            this.btnStageInit.Size = new System.Drawing.Size(100, 30);
+            this.btnStageInit.TabIndex = 71;
+            this.btnStageInit.Text = "平台初始化";
+            this.btnStageInit.UseVisualStyleBackColor = false;
+            this.btnStageInit.Click += new System.EventHandler(this.btnStageInit_Click);
             // 
             // btnErrorReset
             // 
@@ -451,7 +454,7 @@
             // lbStageStatus
             // 
             this.lbStageStatus.AutoSize = true;
-            this.lbStageStatus.Font = new System.Drawing.Font("Microsoft JhengHei", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbStageStatus.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lbStageStatus.Location = new System.Drawing.Point(550, 40);
             this.lbStageStatus.Name = "lbStageStatus";
             this.lbStageStatus.Size = new System.Drawing.Size(0, 30);
@@ -460,7 +463,7 @@
             // lbStageStatusTitle
             // 
             this.lbStageStatusTitle.AutoSize = true;
-            this.lbStageStatusTitle.Font = new System.Drawing.Font("Microsoft JhengHei", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbStageStatusTitle.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lbStageStatusTitle.Location = new System.Drawing.Point(410, 40);
             this.lbStageStatusTitle.Name = "lbStageStatusTitle";
             this.lbStageStatusTitle.Size = new System.Drawing.Size(109, 30);
@@ -469,9 +472,10 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.btnRunSample4_3);
+            this.groupBox1.Controls.Add(this.btnNeedlePipe_3);
+            this.groupBox1.Controls.Add(this.btnNeedleJet_3);
             this.groupBox1.Controls.Add(this.tbORGZ_3);
-            this.groupBox1.Controls.Add(this.btnRunSample3_3);
+            this.groupBox1.Controls.Add(this.btnCameraFocus_3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.btnRunSample2_3);
             this.groupBox1.Controls.Add(this.label3);
@@ -498,19 +502,19 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "軟體點位";
             // 
-            // btnRunSample4_3
+            // btnNeedleJet_3
             // 
-            this.btnRunSample4_3.Location = new System.Drawing.Point(305, 225);
-            this.btnRunSample4_3.Name = "btnRunSample4_3";
-            this.btnRunSample4_3.Size = new System.Drawing.Size(100, 30);
-            this.btnRunSample4_3.TabIndex = 87;
-            this.btnRunSample4_3.Text = "Sample4";
-            this.btnRunSample4_3.UseVisualStyleBackColor = true;
-            this.btnRunSample4_3.Click += new System.EventHandler(this.btnRun_Click);
+            this.btnNeedleJet_3.Location = new System.Drawing.Point(305, 225);
+            this.btnNeedleJet_3.Name = "btnNeedleJet_3";
+            this.btnNeedleJet_3.Size = new System.Drawing.Size(100, 30);
+            this.btnNeedleJet_3.TabIndex = 87;
+            this.btnNeedleJet_3.Text = "噴灑高度";
+            this.btnNeedleJet_3.UseVisualStyleBackColor = true;
+            this.btnNeedleJet_3.Click += new System.EventHandler(this.btnRun_Click);
             // 
             // tbORGZ_3
             // 
-            this.tbORGZ_3.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.tbORGZ_3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.tbORGZ_3.Location = new System.Drawing.Point(405, 175);
             this.tbORGZ_3.Name = "tbORGZ_3";
             this.tbORGZ_3.Size = new System.Drawing.Size(100, 29);
@@ -519,19 +523,19 @@
             this.tbORGZ_3.TextChanged += new System.EventHandler(this.JogVel_TextChanged);
             this.tbORGZ_3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.double_KeyPress);
             // 
-            // btnRunSample3_3
+            // btnCameraFocus_3
             // 
-            this.btnRunSample3_3.Location = new System.Drawing.Point(205, 225);
-            this.btnRunSample3_3.Name = "btnRunSample3_3";
-            this.btnRunSample3_3.Size = new System.Drawing.Size(100, 30);
-            this.btnRunSample3_3.TabIndex = 86;
-            this.btnRunSample3_3.Text = "Sample3";
-            this.btnRunSample3_3.UseVisualStyleBackColor = true;
-            this.btnRunSample3_3.Click += new System.EventHandler(this.btnRun_Click);
+            this.btnCameraFocus_3.Location = new System.Drawing.Point(205, 225);
+            this.btnCameraFocus_3.Name = "btnCameraFocus_3";
+            this.btnCameraFocus_3.Size = new System.Drawing.Size(100, 30);
+            this.btnCameraFocus_3.TabIndex = 86;
+            this.btnCameraFocus_3.Text = "相機對焦";
+            this.btnCameraFocus_3.UseVisualStyleBackColor = true;
+            this.btnCameraFocus_3.Click += new System.EventHandler(this.btnRun_Click);
             // 
             // label2
             // 
-            this.label2.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label2.Location = new System.Drawing.Point(305, 175);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(100, 29);
@@ -551,7 +555,7 @@
             // 
             // label3
             // 
-            this.label3.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label3.Location = new System.Drawing.Point(5, 125);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(100, 29);
@@ -604,7 +608,7 @@
             // 
             // lbPointZ_3
             // 
-            this.lbPointZ_3.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbPointZ_3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lbPointZ_3.Location = new System.Drawing.Point(305, 30);
             this.lbPointZ_3.Name = "lbPointZ_3";
             this.lbPointZ_3.Size = new System.Drawing.Size(100, 20);
@@ -613,7 +617,7 @@
             // 
             // lbPointY_3
             // 
-            this.lbPointY_3.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbPointY_3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lbPointY_3.Location = new System.Drawing.Point(205, 30);
             this.lbPointY_3.Name = "lbPointY_3";
             this.lbPointY_3.Size = new System.Drawing.Size(100, 20);
@@ -622,7 +626,7 @@
             // 
             // lbPointX_3
             // 
-            this.lbPointX_3.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbPointX_3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lbPointX_3.Location = new System.Drawing.Point(105, 30);
             this.lbPointX_3.Name = "lbPointX_3";
             this.lbPointX_3.Size = new System.Drawing.Size(100, 20);
@@ -631,18 +635,19 @@
             // 
             // btnStop_3
             // 
-            this.btnStop_3.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnStop_3.BackColor = System.Drawing.Color.Red;
+            this.btnStop_3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnStop_3.Location = new System.Drawing.Point(405, 75);
             this.btnStop_3.Name = "btnStop_3";
             this.btnStop_3.Size = new System.Drawing.Size(100, 29);
             this.btnStop_3.TabIndex = 44;
             this.btnStop_3.Text = "停止";
-            this.btnStop_3.UseVisualStyleBackColor = true;
+            this.btnStop_3.UseVisualStyleBackColor = false;
             this.btnStop_3.Click += new System.EventHandler(this.btnStop_Click);
             // 
             // btnRun_3
             // 
-            this.btnRun_3.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnRun_3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnRun_3.Location = new System.Drawing.Point(5, 75);
             this.btnRun_3.Name = "btnRun_3";
             this.btnRun_3.Size = new System.Drawing.Size(100, 29);
@@ -654,7 +659,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label21.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label21.Location = new System.Drawing.Point(35, 30);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(41, 20);
@@ -663,7 +668,7 @@
             // 
             // tbPointZ_3
             // 
-            this.tbPointZ_3.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.tbPointZ_3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.tbPointZ_3.Location = new System.Drawing.Point(305, 75);
             this.tbPointZ_3.Name = "tbPointZ_3";
             this.tbPointZ_3.Size = new System.Drawing.Size(100, 29);
@@ -674,7 +679,7 @@
             // 
             // tbPointY_3
             // 
-            this.tbPointY_3.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.tbPointY_3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.tbPointY_3.Location = new System.Drawing.Point(205, 75);
             this.tbPointY_3.Name = "tbPointY_3";
             this.tbPointY_3.Size = new System.Drawing.Size(100, 29);
@@ -685,7 +690,7 @@
             // 
             // tbPointX_3
             // 
-            this.tbPointX_3.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.tbPointX_3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.tbPointX_3.Location = new System.Drawing.Point(105, 75);
             this.tbPointX_3.Name = "tbPointX_3";
             this.tbPointX_3.Size = new System.Drawing.Size(100, 29);
@@ -696,7 +701,7 @@
             // 
             // tbORGR_3
             // 
-            this.tbORGR_3.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.tbORGR_3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.tbORGR_3.Location = new System.Drawing.Point(205, 175);
             this.tbORGR_3.Name = "tbORGR_3";
             this.tbORGR_3.Size = new System.Drawing.Size(100, 29);
@@ -706,7 +711,7 @@
             // 
             // btnORGR_3
             // 
-            this.btnORGR_3.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnORGR_3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnORGR_3.Location = new System.Drawing.Point(105, 175);
             this.btnORGR_3.Name = "btnORGR_3";
             this.btnORGR_3.Size = new System.Drawing.Size(100, 29);
@@ -717,7 +722,7 @@
             // 
             // btnORGXY_3
             // 
-            this.btnORGXY_3.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnORGXY_3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnORGXY_3.Location = new System.Drawing.Point(5, 175);
             this.btnORGXY_3.Name = "btnORGXY_3";
             this.btnORGXY_3.Size = new System.Drawing.Size(100, 29);
@@ -769,7 +774,7 @@
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(53, 20);
             this.label10.TabIndex = 8;
-            this.label10.Text = "X Axis";
+            this.label10.Text = "Y Axis";
             // 
             // label9
             // 
@@ -778,7 +783,7 @@
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(53, 20);
             this.label9.TabIndex = 7;
-            this.label9.Text = "Y Axis";
+            this.label9.Text = "X Axis";
             // 
             // label8
             // 
@@ -789,29 +794,29 @@
             this.label8.TabIndex = 6;
             this.label8.Text = "Z Axis";
             // 
-            // btnYJogN
-            // 
-            this.btnYJogN.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnYJogN.BackgroundImage")));
-            this.btnYJogN.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnYJogN.Location = new System.Drawing.Point(100, 40);
-            this.btnYJogN.Name = "btnYJogN";
-            this.btnYJogN.Size = new System.Drawing.Size(100, 100);
-            this.btnYJogN.TabIndex = 0;
-            this.btnYJogN.UseVisualStyleBackColor = true;
-            this.btnYJogN.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseDown);
-            this.btnYJogN.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseUp);
-            // 
             // btnXJogP
             // 
             this.btnXJogP.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnXJogP.BackgroundImage")));
             this.btnXJogP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnXJogP.Location = new System.Drawing.Point(0, 140);
+            this.btnXJogP.Location = new System.Drawing.Point(100, 40);
             this.btnXJogP.Name = "btnXJogP";
             this.btnXJogP.Size = new System.Drawing.Size(100, 100);
-            this.btnXJogP.TabIndex = 1;
+            this.btnXJogP.TabIndex = 0;
             this.btnXJogP.UseVisualStyleBackColor = true;
             this.btnXJogP.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseDown);
             this.btnXJogP.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseUp);
+            // 
+            // btnYJogP
+            // 
+            this.btnYJogP.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnYJogP.BackgroundImage")));
+            this.btnYJogP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnYJogP.Location = new System.Drawing.Point(0, 140);
+            this.btnYJogP.Name = "btnYJogP";
+            this.btnYJogP.Size = new System.Drawing.Size(100, 100);
+            this.btnYJogP.TabIndex = 1;
+            this.btnYJogP.UseVisualStyleBackColor = true;
+            this.btnYJogP.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseDown);
+            this.btnYJogP.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseUp);
             // 
             // btnZJogP
             // 
@@ -825,17 +830,17 @@
             this.btnZJogP.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseDown);
             this.btnZJogP.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseUp);
             // 
-            // btnXJogN
+            // btnYJogN
             // 
-            this.btnXJogN.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnXJogN.BackgroundImage")));
-            this.btnXJogN.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnXJogN.Location = new System.Drawing.Point(200, 140);
-            this.btnXJogN.Name = "btnXJogN";
-            this.btnXJogN.Size = new System.Drawing.Size(100, 100);
-            this.btnXJogN.TabIndex = 2;
-            this.btnXJogN.UseVisualStyleBackColor = true;
-            this.btnXJogN.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseDown);
-            this.btnXJogN.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseUp);
+            this.btnYJogN.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnYJogN.BackgroundImage")));
+            this.btnYJogN.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnYJogN.Location = new System.Drawing.Point(200, 140);
+            this.btnYJogN.Name = "btnYJogN";
+            this.btnYJogN.Size = new System.Drawing.Size(100, 100);
+            this.btnYJogN.TabIndex = 2;
+            this.btnYJogN.UseVisualStyleBackColor = true;
+            this.btnYJogN.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseDown);
+            this.btnYJogN.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseUp);
             // 
             // btnZJogN
             // 
@@ -849,17 +854,17 @@
             this.btnZJogN.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseDown);
             this.btnZJogN.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseUp);
             // 
-            // btnYJogP
+            // btnXJogN
             // 
-            this.btnYJogP.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnYJogP.BackgroundImage")));
-            this.btnYJogP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnYJogP.Location = new System.Drawing.Point(100, 240);
-            this.btnYJogP.Name = "btnYJogP";
-            this.btnYJogP.Size = new System.Drawing.Size(100, 100);
-            this.btnYJogP.TabIndex = 3;
-            this.btnYJogP.UseVisualStyleBackColor = true;
-            this.btnYJogP.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseDown);
-            this.btnYJogP.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseUp);
+            this.btnXJogN.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnXJogN.BackgroundImage")));
+            this.btnXJogN.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnXJogN.Location = new System.Drawing.Point(100, 240);
+            this.btnXJogN.Name = "btnXJogN";
+            this.btnXJogN.Size = new System.Drawing.Size(100, 100);
+            this.btnXJogN.TabIndex = 3;
+            this.btnXJogN.UseVisualStyleBackColor = true;
+            this.btnXJogN.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseDown);
+            this.btnXJogN.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnJog_MouseUp);
             // 
             // gbCamera
             // 
@@ -953,7 +958,7 @@
             this.MotorPage.Controls.Add(this.groupBox3);
             this.MotorPage.Controls.Add(this.groupBox2);
             this.MotorPage.Controls.Add(this.gpFixedPointData);
-            this.MotorPage.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MotorPage.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.MotorPage.Location = new System.Drawing.Point(4, 34);
             this.MotorPage.Name = "MotorPage";
             this.MotorPage.Padding = new System.Windows.Forms.Padding(3);
@@ -964,8 +969,8 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.btnRunSample4_1);
-            this.groupBox3.Controls.Add(this.btnRunSample3_1);
+            this.groupBox3.Controls.Add(this.btnNeedleJet_1);
+            this.groupBox3.Controls.Add(this.btnCameraFocus_1);
             this.groupBox3.Controls.Add(this.btnRunSample2_1);
             this.groupBox3.Controls.Add(this.btnRunSample1_1);
             this.groupBox3.Controls.Add(this.label16);
@@ -988,25 +993,25 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "硬體點位";
             // 
-            // btnRunSample4_1
+            // btnNeedleJet_1
             // 
-            this.btnRunSample4_1.Location = new System.Drawing.Point(325, 175);
-            this.btnRunSample4_1.Name = "btnRunSample4_1";
-            this.btnRunSample4_1.Size = new System.Drawing.Size(100, 30);
-            this.btnRunSample4_1.TabIndex = 83;
-            this.btnRunSample4_1.Text = "Sample4";
-            this.btnRunSample4_1.UseVisualStyleBackColor = true;
-            this.btnRunSample4_1.Click += new System.EventHandler(this.btnRun_Click);
+            this.btnNeedleJet_1.Location = new System.Drawing.Point(325, 175);
+            this.btnNeedleJet_1.Name = "btnNeedleJet_1";
+            this.btnNeedleJet_1.Size = new System.Drawing.Size(100, 30);
+            this.btnNeedleJet_1.TabIndex = 83;
+            this.btnNeedleJet_1.Text = "噴灑位置";
+            this.btnNeedleJet_1.UseVisualStyleBackColor = true;
+            this.btnNeedleJet_1.Click += new System.EventHandler(this.btnRun_Click);
             // 
-            // btnRunSample3_1
+            // btnCameraFocus_1
             // 
-            this.btnRunSample3_1.Location = new System.Drawing.Point(225, 175);
-            this.btnRunSample3_1.Name = "btnRunSample3_1";
-            this.btnRunSample3_1.Size = new System.Drawing.Size(100, 30);
-            this.btnRunSample3_1.TabIndex = 82;
-            this.btnRunSample3_1.Text = "Sample3";
-            this.btnRunSample3_1.UseVisualStyleBackColor = true;
-            this.btnRunSample3_1.Click += new System.EventHandler(this.btnRun_Click);
+            this.btnCameraFocus_1.Location = new System.Drawing.Point(225, 175);
+            this.btnCameraFocus_1.Name = "btnCameraFocus_1";
+            this.btnCameraFocus_1.Size = new System.Drawing.Size(100, 30);
+            this.btnCameraFocus_1.TabIndex = 82;
+            this.btnCameraFocus_1.Text = "相機對焦";
+            this.btnCameraFocus_1.UseVisualStyleBackColor = true;
+            this.btnCameraFocus_1.Click += new System.EventHandler(this.btnRun_Click);
             // 
             // btnRunSample2_1
             // 
@@ -1031,7 +1036,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label16.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label16.Location = new System.Drawing.Point(25, 127);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(73, 20);
@@ -1073,7 +1078,7 @@
             // 
             // lbPointZ_1
             // 
-            this.lbPointZ_1.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbPointZ_1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lbPointZ_1.Location = new System.Drawing.Point(325, 30);
             this.lbPointZ_1.Name = "lbPointZ_1";
             this.lbPointZ_1.Size = new System.Drawing.Size(100, 20);
@@ -1082,7 +1087,7 @@
             // 
             // lbPointY_1
             // 
-            this.lbPointY_1.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbPointY_1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lbPointY_1.Location = new System.Drawing.Point(225, 30);
             this.lbPointY_1.Name = "lbPointY_1";
             this.lbPointY_1.Size = new System.Drawing.Size(100, 20);
@@ -1091,7 +1096,7 @@
             // 
             // lbPointX_1
             // 
-            this.lbPointX_1.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbPointX_1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lbPointX_1.Location = new System.Drawing.Point(125, 30);
             this.lbPointX_1.Name = "lbPointX_1";
             this.lbPointX_1.Size = new System.Drawing.Size(100, 20);
@@ -1100,7 +1105,7 @@
             // 
             // btnStop_1
             // 
-            this.btnStop_1.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnStop_1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnStop_1.Location = new System.Drawing.Point(425, 75);
             this.btnStop_1.Name = "btnStop_1";
             this.btnStop_1.Size = new System.Drawing.Size(100, 29);
@@ -1111,7 +1116,7 @@
             // 
             // btnRun_1
             // 
-            this.btnRun_1.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnRun_1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnRun_1.Location = new System.Drawing.Point(25, 75);
             this.btnRun_1.Name = "btnRun_1";
             this.btnRun_1.Size = new System.Drawing.Size(100, 29);
@@ -1123,7 +1128,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label20.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label20.Location = new System.Drawing.Point(55, 30);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(41, 20);
@@ -1132,7 +1137,7 @@
             // 
             // tbPointZ_1
             // 
-            this.tbPointZ_1.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.tbPointZ_1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.tbPointZ_1.Location = new System.Drawing.Point(325, 75);
             this.tbPointZ_1.Name = "tbPointZ_1";
             this.tbPointZ_1.Size = new System.Drawing.Size(100, 29);
@@ -1143,7 +1148,7 @@
             // 
             // tbPointY_1
             // 
-            this.tbPointY_1.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.tbPointY_1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.tbPointY_1.Location = new System.Drawing.Point(225, 75);
             this.tbPointY_1.Name = "tbPointY_1";
             this.tbPointY_1.Size = new System.Drawing.Size(100, 29);
@@ -1154,7 +1159,7 @@
             // 
             // tbPointX_1
             // 
-            this.tbPointX_1.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.tbPointX_1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.tbPointX_1.Location = new System.Drawing.Point(125, 75);
             this.tbPointX_1.Name = "tbPointX_1";
             this.tbPointX_1.Size = new System.Drawing.Size(100, 29);
@@ -1192,7 +1197,7 @@
             // 
             // tbORGZ_2
             // 
-            this.tbORGZ_2.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.tbORGZ_2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.tbORGZ_2.Location = new System.Drawing.Point(425, 175);
             this.tbORGZ_2.Name = "tbORGZ_2";
             this.tbORGZ_2.Size = new System.Drawing.Size(100, 29);
@@ -1203,7 +1208,7 @@
             // 
             // label1
             // 
-            this.label1.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label1.Location = new System.Drawing.Point(325, 175);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(100, 29);
@@ -1214,7 +1219,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label15.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label15.Location = new System.Drawing.Point(25, 127);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(73, 20);
@@ -1256,7 +1261,7 @@
             // 
             // lbPointZ_2
             // 
-            this.lbPointZ_2.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbPointZ_2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lbPointZ_2.Location = new System.Drawing.Point(325, 30);
             this.lbPointZ_2.Name = "lbPointZ_2";
             this.lbPointZ_2.Size = new System.Drawing.Size(100, 20);
@@ -1265,7 +1270,7 @@
             // 
             // lbPointY_2
             // 
-            this.lbPointY_2.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbPointY_2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lbPointY_2.Location = new System.Drawing.Point(225, 30);
             this.lbPointY_2.Name = "lbPointY_2";
             this.lbPointY_2.Size = new System.Drawing.Size(100, 20);
@@ -1274,7 +1279,7 @@
             // 
             // lbPointX_2
             // 
-            this.lbPointX_2.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbPointX_2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lbPointX_2.Location = new System.Drawing.Point(125, 30);
             this.lbPointX_2.Name = "lbPointX_2";
             this.lbPointX_2.Size = new System.Drawing.Size(100, 20);
@@ -1283,7 +1288,7 @@
             // 
             // btnStop_2
             // 
-            this.btnStop_2.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnStop_2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnStop_2.Location = new System.Drawing.Point(425, 75);
             this.btnStop_2.Name = "btnStop_2";
             this.btnStop_2.Size = new System.Drawing.Size(100, 29);
@@ -1294,7 +1299,7 @@
             // 
             // btnRun_2
             // 
-            this.btnRun_2.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnRun_2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnRun_2.Location = new System.Drawing.Point(25, 75);
             this.btnRun_2.Name = "btnRun_2";
             this.btnRun_2.Size = new System.Drawing.Size(100, 29);
@@ -1306,7 +1311,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label4.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label4.Location = new System.Drawing.Point(55, 30);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(41, 20);
@@ -1315,7 +1320,7 @@
             // 
             // tbPointZ_2
             // 
-            this.tbPointZ_2.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.tbPointZ_2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.tbPointZ_2.Location = new System.Drawing.Point(325, 75);
             this.tbPointZ_2.Name = "tbPointZ_2";
             this.tbPointZ_2.Size = new System.Drawing.Size(100, 29);
@@ -1326,7 +1331,7 @@
             // 
             // tbPointY_2
             // 
-            this.tbPointY_2.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.tbPointY_2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.tbPointY_2.Location = new System.Drawing.Point(225, 75);
             this.tbPointY_2.Name = "tbPointY_2";
             this.tbPointY_2.Size = new System.Drawing.Size(100, 29);
@@ -1337,7 +1342,7 @@
             // 
             // tbPointX_2
             // 
-            this.tbPointX_2.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.tbPointX_2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.tbPointX_2.Location = new System.Drawing.Point(125, 75);
             this.tbPointX_2.Name = "tbPointX_2";
             this.tbPointX_2.Size = new System.Drawing.Size(100, 29);
@@ -1348,7 +1353,7 @@
             // 
             // tbORGR_2
             // 
-            this.tbORGR_2.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.tbORGR_2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.tbORGR_2.Location = new System.Drawing.Point(225, 175);
             this.tbORGR_2.Name = "tbORGR_2";
             this.tbORGR_2.Size = new System.Drawing.Size(100, 29);
@@ -1358,7 +1363,7 @@
             // 
             // btnORGR_2
             // 
-            this.btnORGR_2.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnORGR_2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnORGR_2.Location = new System.Drawing.Point(125, 175);
             this.btnORGR_2.Name = "btnORGR_2";
             this.btnORGR_2.Size = new System.Drawing.Size(100, 29);
@@ -1369,7 +1374,7 @@
             // 
             // btnORGXY_2
             // 
-            this.btnORGXY_2.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnORGXY_2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnORGXY_2.Location = new System.Drawing.Point(25, 175);
             this.btnORGXY_2.Name = "btnORGXY_2";
             this.btnORGXY_2.Size = new System.Drawing.Size(100, 29);
@@ -1380,16 +1385,6 @@
             // 
             // gpFixedPointData
             // 
-            this.gpFixedPointData.Controls.Add(this.btnModifySample4);
-            this.gpFixedPointData.Controls.Add(this.tbSample4Z);
-            this.gpFixedPointData.Controls.Add(this.tbSample4Y);
-            this.gpFixedPointData.Controls.Add(this.tbSample4X);
-            this.gpFixedPointData.Controls.Add(this.lbSample4Title);
-            this.gpFixedPointData.Controls.Add(this.btnModifySample3);
-            this.gpFixedPointData.Controls.Add(this.tbSample3Z);
-            this.gpFixedPointData.Controls.Add(this.tbSample3Y);
-            this.gpFixedPointData.Controls.Add(this.tbSample3X);
-            this.gpFixedPointData.Controls.Add(this.lbSample3Title);
             this.gpFixedPointData.Controls.Add(this.btnModifySample2);
             this.gpFixedPointData.Controls.Add(this.tbSample2Z);
             this.gpFixedPointData.Controls.Add(this.tbSample2Y);
@@ -1424,92 +1419,6 @@
             this.gpFixedPointData.TabIndex = 57;
             this.gpFixedPointData.TabStop = false;
             this.gpFixedPointData.Text = "固定點位資料";
-            // 
-            // btnModifySample4
-            // 
-            this.btnModifySample4.Location = new System.Drawing.Point(425, 286);
-            this.btnModifySample4.Name = "btnModifySample4";
-            this.btnModifySample4.Size = new System.Drawing.Size(100, 30);
-            this.btnModifySample4.TabIndex = 94;
-            this.btnModifySample4.Text = "Modify";
-            this.btnModifySample4.UseVisualStyleBackColor = true;
-            this.btnModifySample4.Click += new System.EventHandler(this.btnModify_Click);
-            // 
-            // tbSample4Z
-            // 
-            this.tbSample4Z.Location = new System.Drawing.Point(325, 287);
-            this.tbSample4Z.Name = "tbSample4Z";
-            this.tbSample4Z.Size = new System.Drawing.Size(100, 29);
-            this.tbSample4Z.TabIndex = 93;
-            this.tbSample4Z.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.double_KeyPress);
-            // 
-            // tbSample4Y
-            // 
-            this.tbSample4Y.Location = new System.Drawing.Point(225, 287);
-            this.tbSample4Y.Name = "tbSample4Y";
-            this.tbSample4Y.Size = new System.Drawing.Size(100, 29);
-            this.tbSample4Y.TabIndex = 92;
-            this.tbSample4Y.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.double_KeyPress);
-            // 
-            // tbSample4X
-            // 
-            this.tbSample4X.Location = new System.Drawing.Point(125, 287);
-            this.tbSample4X.Name = "tbSample4X";
-            this.tbSample4X.Size = new System.Drawing.Size(100, 29);
-            this.tbSample4X.TabIndex = 91;
-            this.tbSample4X.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.double_KeyPress);
-            // 
-            // lbSample4Title
-            // 
-            this.lbSample4Title.AutoSize = true;
-            this.lbSample4Title.Location = new System.Drawing.Point(25, 290);
-            this.lbSample4Title.Name = "lbSample4Title";
-            this.lbSample4Title.Size = new System.Drawing.Size(78, 20);
-            this.lbSample4Title.TabIndex = 90;
-            this.lbSample4Title.Text = "Sample 4";
-            // 
-            // btnModifySample3
-            // 
-            this.btnModifySample3.Location = new System.Drawing.Point(425, 246);
-            this.btnModifySample3.Name = "btnModifySample3";
-            this.btnModifySample3.Size = new System.Drawing.Size(100, 30);
-            this.btnModifySample3.TabIndex = 89;
-            this.btnModifySample3.Text = "Modify";
-            this.btnModifySample3.UseVisualStyleBackColor = true;
-            this.btnModifySample3.Click += new System.EventHandler(this.btnModify_Click);
-            // 
-            // tbSample3Z
-            // 
-            this.tbSample3Z.Location = new System.Drawing.Point(325, 247);
-            this.tbSample3Z.Name = "tbSample3Z";
-            this.tbSample3Z.Size = new System.Drawing.Size(100, 29);
-            this.tbSample3Z.TabIndex = 88;
-            this.tbSample3Z.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.double_KeyPress);
-            // 
-            // tbSample3Y
-            // 
-            this.tbSample3Y.Location = new System.Drawing.Point(225, 247);
-            this.tbSample3Y.Name = "tbSample3Y";
-            this.tbSample3Y.Size = new System.Drawing.Size(100, 29);
-            this.tbSample3Y.TabIndex = 87;
-            this.tbSample3Y.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.double_KeyPress);
-            // 
-            // tbSample3X
-            // 
-            this.tbSample3X.Location = new System.Drawing.Point(125, 247);
-            this.tbSample3X.Name = "tbSample3X";
-            this.tbSample3X.Size = new System.Drawing.Size(100, 29);
-            this.tbSample3X.TabIndex = 86;
-            this.tbSample3X.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.double_KeyPress);
-            // 
-            // lbSample3Title
-            // 
-            this.lbSample3Title.AutoSize = true;
-            this.lbSample3Title.Location = new System.Drawing.Point(25, 250);
-            this.lbSample3Title.Name = "lbSample3Title";
-            this.lbSample3Title.Size = new System.Drawing.Size(78, 20);
-            this.lbSample3Title.TabIndex = 85;
-            this.lbSample3Title.Text = "Sample 3";
             // 
             // btnModifySample2
             // 
@@ -1753,16 +1662,16 @@
             this.Needle1Title.TabIndex = 57;
             this.Needle1Title.Text = "Needle 1";
             // 
-            // CameraPage
+            // btnNeedlePipe_3
             // 
-            this.CameraPage.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.CameraPage.Location = new System.Drawing.Point(4, 34);
-            this.CameraPage.Name = "CameraPage";
-            this.CameraPage.Padding = new System.Windows.Forms.Padding(3);
-            this.CameraPage.Size = new System.Drawing.Size(1892, 962);
-            this.CameraPage.TabIndex = 1;
-            this.CameraPage.Text = "Camera";
-            this.CameraPage.UseVisualStyleBackColor = true;
+            this.btnNeedlePipe_3.Location = new System.Drawing.Point(405, 225);
+            this.btnNeedlePipe_3.Name = "btnNeedlePipe_3";
+            this.btnNeedlePipe_3.Size = new System.Drawing.Size(100, 30);
+            this.btnNeedlePipe_3.TabIndex = 88;
+            this.btnNeedlePipe_3.Text = "抽取高度";
+            this.btnNeedlePipe_3.UseVisualStyleBackColor = true;
+            this.btnNeedlePipe_3.Visible = false;
+            this.btnNeedlePipe_3.Click += new System.EventHandler(this.btnRun_Click);
             // 
             // InkJetPrinter
             // 
@@ -1770,6 +1679,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 1001);
             this.Controls.Add(this.tcMain);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "InkJetPrinter";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "InkJetPrinter";
@@ -1805,16 +1715,15 @@
 
         private System.Windows.Forms.TabControl tcMain;
         private System.Windows.Forms.TabPage MotorPage;
-        private System.Windows.Forms.TabPage CameraPage;
         private System.Windows.Forms.TabPage ControlPage;
         private System.Windows.Forms.GroupBox gbPointData;
         private System.Windows.Forms.GroupBox gbAxis;
-        private System.Windows.Forms.Button btnYJogN;
         private System.Windows.Forms.Button btnXJogP;
-        private System.Windows.Forms.Button btnZJogP;
-        private System.Windows.Forms.Button btnXJogN;
-        private System.Windows.Forms.Button btnZJogN;
         private System.Windows.Forms.Button btnYJogP;
+        private System.Windows.Forms.Button btnZJogP;
+        private System.Windows.Forms.Button btnYJogN;
+        private System.Windows.Forms.Button btnZJogN;
+        private System.Windows.Forms.Button btnXJogN;
         private System.Windows.Forms.GroupBox gbCamera;
         private System.Windows.Forms.DataGridView DGPoint;
         private System.Windows.Forms.Label label10;
@@ -1824,16 +1733,6 @@
         private System.Windows.Forms.Button btnRunPointStop;
         private System.Windows.Forms.Button btnRunPoint;
         private System.Windows.Forms.Button btnOpenCSV;
-        private System.Windows.Forms.Button btnModifySample4;
-        private System.Windows.Forms.TextBox tbSample4Z;
-        private System.Windows.Forms.TextBox tbSample4Y;
-        private System.Windows.Forms.TextBox tbSample4X;
-        private System.Windows.Forms.Label lbSample4Title;
-        private System.Windows.Forms.Button btnModifySample3;
-        private System.Windows.Forms.TextBox tbSample3Z;
-        private System.Windows.Forms.TextBox tbSample3Y;
-        private System.Windows.Forms.TextBox tbSample3X;
-        private System.Windows.Forms.Label lbSample3Title;
         private System.Windows.Forms.Button btnModifySample2;
         private System.Windows.Forms.TextBox tbSample2Z;
         private System.Windows.Forms.TextBox tbSample2Y;
@@ -1884,8 +1783,8 @@
         private System.Windows.Forms.RadioButton rbtnCamera_2;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button btnRunSample4_1;
-        private System.Windows.Forms.Button btnRunSample3_1;
+        private System.Windows.Forms.Button btnNeedleJet_1;
+        private System.Windows.Forms.Button btnCameraFocus_1;
         private System.Windows.Forms.Button btnRunSample2_1;
         private System.Windows.Forms.Button btnRunSample1_1;
         private System.Windows.Forms.Label label16;
@@ -1922,8 +1821,8 @@
         private System.Windows.Forms.TextBox tbORGR_3;
         private System.Windows.Forms.Button btnORGR_3;
         private System.Windows.Forms.Button btnORGXY_3;
-        private System.Windows.Forms.Button btnRunSample4_3;
-        private System.Windows.Forms.Button btnRunSample3_3;
+        private System.Windows.Forms.Button btnNeedleJet_3;
+        private System.Windows.Forms.Button btnCameraFocus_3;
         private System.Windows.Forms.Button btnRunSample2_3;
         private System.Windows.Forms.Button btnRunSample1_3;
         private System.Windows.Forms.PictureBox pbCamera;
@@ -1944,6 +1843,8 @@
         private System.Windows.Forms.Label lbStageStatus;
         private System.Windows.Forms.Label lbStageStatusTitle;
         private PumpUserControl UCPump;
+        private System.Windows.Forms.Button btnStageInit;
+        private System.Windows.Forms.Button btnNeedlePipe_3;
     }
 }
 

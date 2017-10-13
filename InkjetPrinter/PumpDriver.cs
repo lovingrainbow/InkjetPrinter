@@ -13,7 +13,6 @@ namespace InkjetPrinter
     {
         SerialPort PumpPort = new SerialPort();
         //check serial port is busy
-        bool busy;
         //Pump state
         public int PlungerPosition;
         public int ValvePosition;

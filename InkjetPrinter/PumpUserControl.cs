@@ -26,6 +26,8 @@ namespace InkjetPrinter
             //Valve Control
             //ComboBox
             cbValve.SelectedIndex = 0;
+            cbClean.SelectedIndex = 0;
+            CleanValve = 3;
             //Plunger Control
             //tbPlunger
             tbPlunger.Text = "0";
@@ -48,7 +50,7 @@ namespace InkjetPrinter
             //tbNeedle2Pipe
             tbNeedle2Pipe.Text = _Needle2Pipe.ToString();
             //radiobutton init
-            rbtnAir.Checked = true;
+            rbtnWater.Checked = true;
         }
         private void IntText_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -108,57 +110,6 @@ namespace InkjetPrinter
         }
         public void RefreshPumpUI()
         {
-            if (PumpPort.IsOpen)
-            {
-                string str;
-
-                if (count < 10)
-                    count++;
-                else
-                    count = 1;
-
-                if (SendingCommand)
-                {
-                    str = Command;
-                }
-                else
-                switch (count)
-                {
-                    case 0:
-                        //Command Mode
-                        str = Command;
-                        break;
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 6:
-                    case 7:
-                    case 8:
-                    case 9:
-                        //plunger position query
-                        str = "/1?" + '\u000D';
-                        break;
-                    case 5:
-                    case 10:
-                        //Valve Position query
-                        str = "/1?6" + '\u000D';
-                        break;
-                    default:
-                        str = "/1?" + '\u000D';
-                        count = 1;
-                        break;
-                }
-                tbSendData.Text += str + Environment.NewLine;
-                ParameterizedThreadStart refreshRun = new ParameterizedThreadStart(SerialCommunication);
-                Thread refresh = new Thread(refreshRun);
-                refresh.Start(str);
-            }
-            else
-            {
-                tbSendData.Text += "Serial port can't open." + Environment.NewLine;
-            }
-
             //tbNeedle1 tbNeedle2 refresh
             lbNeedle1.Text = _Needle1.ToString();
             lbNeedle2.Text = _Needle2.ToString();
@@ -186,11 +137,12 @@ namespace InkjetPrinter
             }
             else
                 ButtonControl(true);
-                */
+                
             if (Busy)
                 ButtonControl(false);
             else
                 ButtonControl(true);
+                */
 
             if (SendCount > 100)
             {
@@ -200,104 +152,10 @@ namespace InkjetPrinter
             }
             SendCount++;
         }
-        public void SerialCommunication(object o)
-        {
-            string command = o as string;
-            PumpPort.DiscardInBuffer();
-            PumpPort.DiscardOutBuffer();
-            PumpPort.Write(command);
-            Thread.Sleep(50);
-            DataReceived();
-        }
-        
-        public void DataReceived()
-        {
-            try
-            {
-                Byte[] buffer = new Byte[64];
-                Byte[] data;
-                int Length = PumpPort.Read(buffer, 0, buffer.Length);
-                data = new Byte[Length];
-                if (SendingCommand)
-                {
-                    if (Length > 5)
-                        if (buffer[1] == 47 && buffer[2] == 48 && buffer[Length - 2 ] == 13 && buffer[Length - 1] == 10)
-                            Pump = buffer[3];
 
-                    SendingCommand = false;
-                }
-                else
-                {
-                    switch (count)
-                    {
-                        case 0:
-                            //Command mode result
-                            break;
-                        case 1:
-                        case 2:
-                        case 3:
-                        case 4:
-                        case 6:
-                        case 7:
-                        case 8:
-                        case 9:
-                            //check position status
-                            if (Length > 5)
-                            {
-                                if (buffer[1] == 47 && buffer[2] == 48 && buffer[Length - 2] == 13 && buffer[Length - 1] == 10)
-                                {
-                                    for (int i = 4; i < Length - 3; i++)
-                                    {
-                                        data[i - 4] = buffer[i];
-                                    }
-                                    try
-                                    {
-                                        Plunger = int.Parse(Encoding.Default.GetString(data));
-                                        Pump = buffer[3];
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        //TODO: write log
-                                    }
-                                }
-                            }
-                            break;
-                        case 5:
-                        case 10:
-                            //check valve status
-                            if (Length > 5)
-                            {
-                                if (buffer[1] == 47 && buffer[2] == 48 && buffer[Length - 2] == 13 && buffer[Length - 1] == 10)
-                                {
-                                    for (int i = 4; i < Length - 3; i++)
-                                    {
-                                        data[i - 4] = buffer[i];
-                                    }
-                                    try
-                                    {
-                                        Valve = int.Parse(Encoding.Default.GetString(data));
-                                        Pump = buffer[3];
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        //TODO: write log
-                                    }
-                                }
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }                
-                //display data to textbox
-
-                Display d = new Display(DisplayReceiveData);
-                this.Invoke(d, Encoding.Default.GetString(buffer) + "(" + Length.ToString() + ")");
-            }
-            catch(Exception e)
-            {
-                //MessageBox.Show(e.ToString());
-            }
+        public void DisplaySendData(string str)
+        {
+            tbSendData.Text += str + Environment.NewLine;
         }
         public void DisplayReceiveData(string str)
         {
@@ -345,7 +203,10 @@ namespace InkjetPrinter
                     case 0:
                         //check volume
                         if (RemainingVolume > 0)
-                            step++;
+                            if (Plunger > 0)
+                                step++;
+                            else
+                                step = 4;
                         else
                             Cycle_Pipe = false;
                         break;
@@ -353,11 +214,13 @@ namespace InkjetPrinter
                         //PipeOut
                         PlungerBuffer = Plunger;
                         if (RemainingVolume > Plunger)
-                            Pipe(3, PipeInVel, 0);
+                            Pipe(3, PipeOutVel, 0);
                         else
-                            Pipe(3, PipeInVel, (Plunger - RemainingVolume));
+                            Pipe(3, PipeOutVel, (Plunger - RemainingVolume));
+                        
                         if (Busy)
                             step++;
+                            
                         break;
                     case 2:
                         //wait pipein finish
@@ -384,11 +247,11 @@ namespace InkjetPrinter
                     case 4:
                         //empty air or water
                         if (rbtnAir.Checked)
-                            Pipe(2, PipeOutVel, 48000);
+                            Pipe(2, PipeInVel, 48000);
                         else if (rbtnWater.Checked)
-                            Pipe(1, PipeOutVel, 48000);
+                            Pipe(1, PipeInVel, 48000);
                         else
-                            Pipe(2, PipeOutVel, 48000);
+                            Pipe(2, PipeInVel, 48000);
                         if (Busy)
                             step++;
                         break;
@@ -417,7 +280,10 @@ namespace InkjetPrinter
                     case 0:
                         //check volume
                         if (RemainingVolume > 0)
-                            step++;
+                            if (Plunger > 0)
+                                step++;
+                            else
+                                step = 4;
                         else
                             Cycle_Pipe = false;
                         break;
@@ -425,9 +291,9 @@ namespace InkjetPrinter
                         //PipeOut
                         PlungerBuffer = Plunger;
                         if (RemainingVolume > Plunger)
-                            Pipe(4, PipeInVel, 0);
+                            Pipe(4, PipeOutVel, 0);
                         else
-                            Pipe(4, PipeInVel, (Plunger - RemainingVolume));
+                            Pipe(4, PipeOutVel, (Plunger - RemainingVolume));
                         if (Busy)
                             step++;
                         break;
@@ -456,11 +322,11 @@ namespace InkjetPrinter
                     case 4:
                         //empty air or water
                         if (rbtnAir.Checked)
-                            Pipe(2, PipeOutVel, 48000);
+                            Pipe(2, PipeInVel, 48000);
                         else if (rbtnWater.Checked)
-                            Pipe(1, PipeOutVel, 48000);
+                            Pipe(1, PipeInVel, 48000);
                         else
-                            Pipe(2, PipeOutVel, 48000);
+                            Pipe(2, PipeInVel, 48000);
                         if (Busy)
                             step++;
                         break;
@@ -523,7 +389,10 @@ namespace InkjetPrinter
                         if (RemainingVolume > 0)
                             step++;
                         else
+                        {
                             Cycle_Pipe = false;
+                            MessageBox.Show("針1抽取動作完成");
+                        }
                         break;
                     case 4:
                         //empty air or water
@@ -569,9 +438,9 @@ namespace InkjetPrinter
                         //PipeOut
                         PlungerBuffer = Plunger;
                         if (RemainingVolume > Plunger)
-                            Pipe(3, PipeInVel, 0);
+                            Pipe(3, PipeOutVel, 0);
                         else
-                            Pipe(3, PipeInVel, (Plunger - RemainingVolume));
+                            Pipe(3, PipeOutVel, (Plunger - RemainingVolume));
                         if (Busy)
                             step++;
                         break;
@@ -595,16 +464,19 @@ namespace InkjetPrinter
                         if (RemainingVolume > 0)
                             step++;
                         else
+                        {
                             Cycle_Pipe = false;
+                            MessageBox.Show("針1排出動作完成");
+                        }
                         break;
                     case 4:
                         //empty air or water
                         if (rbtnAir.Checked)
-                            Pipe(2, PipeOutVel, 48000);
+                            Pipe(2, PipeInVel, 48000);
                         else if (rbtnWater.Checked)
-                            Pipe(1, PipeOutVel, 48000);
+                            Pipe(1, PipeInVel, 48000);
                         else
-                            Pipe(2, PipeOutVel, 48000);
+                            Pipe(2, PipeInVel, 48000);
                         if (Busy)
                             step++;
                         break;
@@ -667,7 +539,10 @@ namespace InkjetPrinter
                         if (RemainingVolume > 0)
                             step++;
                         else
+                        {
                             Cycle_Pipe = false;
+                            MessageBox.Show("針2抽取動作完成");
+                        }                            
                         break;
                     case 4:
                         //empty air or water
@@ -713,9 +588,9 @@ namespace InkjetPrinter
                         //PipeOut
                         PlungerBuffer = Plunger;
                         if (RemainingVolume > Plunger)
-                            Pipe(4, PipeInVel, 0);
+                            Pipe(4, PipeOutVel, 0);
                         else
-                            Pipe(4, PipeInVel, (Plunger - RemainingVolume));
+                            Pipe(4, PipeOutVel, (Plunger - RemainingVolume));
                         if (Busy)
                             step++;
                         break;
@@ -739,16 +614,19 @@ namespace InkjetPrinter
                         if (RemainingVolume > 0)
                             step++;
                         else
+                        {
                             Cycle_Pipe = false;
+                            MessageBox.Show("針2排出動作完成");
+                        }                            
                         break;
                     case 4:
                         //empty air or water
                         if (rbtnAir.Checked)
-                            Pipe(2, PipeOutVel, 48000);
+                            Pipe(2, PipeInVel, 48000);
                         else if (rbtnWater.Checked)
-                            Pipe(1, PipeOutVel, 48000);
+                            Pipe(1, PipeInVel, 48000);
                         else
-                            Pipe(2, PipeOutVel, 48000);
+                            Pipe(2, PipeInVel, 48000);
                         if (Busy)
                             step++;
                         break;
@@ -764,6 +642,65 @@ namespace InkjetPrinter
                 }
             }
         }
+        public void CleanCycle()
+        {
+            int step = 0;
+            int CycleCount = 0;
+            while(Cycle_Pipe)
+            {
+                switch(step)
+                {
+                    case 0:
+                        if (Plunger > 0)
+                        {
+                            step++;
+                        }                            
+                        else
+                            step = 3;
+                        break;
+                    case 1:
+                        {
+                            Pipe(CleanValve, PipeOutVel, 0);
+                            if (Busy)
+                                step++;
+                            break;
+                        }
+                    case 2:
+                        if (Plunger == 0)
+                        {
+                            if (CycleCount >= CleanTime)
+                            {
+                                Cycle_Pipe = false;
+                                MessageBox.Show("清洗動作完成");
+                            }                                
+                            else
+                                step++;                
+                        }                            
+                        break;
+                    case 3:
+                        {
+                            if (rbtnWater.Checked)
+                                Pipe(1, PipeInVel, 48000);
+                            else
+                                Pipe(2, PipeInVel, 48000);
+
+                            if (Busy)
+                                step++;
+                            break;
+                        }
+                    case 4:
+                        if (Plunger == 48000)
+                        {
+                            CycleCount++;
+                            step = 0;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
         private void btnPlunger_Click(object sender, EventArgs e)
         {
             if (!Cycle_Pipe)
@@ -793,7 +730,7 @@ namespace InkjetPrinter
             Needle1 = 0;
             Needle2 = 0;
             Cycle_Pipe = false;
-            Command = "/1ZR" + '\u000D';
+            Command = "/1ZN2R" + '\u000D';
             SendingCommand = true;
         }
 
@@ -861,6 +798,28 @@ namespace InkjetPrinter
         {
             PumpPort.Close();
         }
-        
+
+        private void btnClean_Click(object sender, EventArgs e)
+        {
+            if (!Cycle_Pipe)
+            {
+                Cycle_Pipe = true;
+                Thread CleanThread = new Thread(CleanCycle);
+                CleanThread.Start();
+            }
+        }
+
+        private void cbClean_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CleanValve = cbClean.SelectedIndex + 3;
+        }
+
+        private void tbCleanTimes_TextChanged(object sender, EventArgs e)
+        {
+            if (tbCleanTimes.Text.Length > 0)
+                CleanTime = int.Parse(tbCleanTimes.Text);
+            else
+                CleanTime = 0;
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace InkjetPrinter
     {
         public static void ErrorLog(string message, int errorCode)
         {
-            Console.WriteLine("Error : " + message);    
+            Console.WriteLine("Error : " + message);
         }
 
         public static void log(string message)

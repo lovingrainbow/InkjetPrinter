@@ -25,10 +25,24 @@ namespace InkjetPrinter
         {
             double angle = Math.PI * pointConverter.dR / 180;
             Point point1 = new Point();
-            point1.X = point.X * Math.Cos(angle) + point.Y * Math.Sin(angle) + pointConverter.dX;
-            point1.Y = -1 * point.X * Math.Sin(angle) + point.Y * Math.Cos(angle) + pointConverter.dY;
+            point1.X = point.X * Math.Cos(-1*angle) + point.Y * Math.Sin(-1*angle) + pointConverter.dX;
+            point1.Y = -1 * point.X * Math.Sin(-1*angle) + point.Y * Math.Cos(-1*angle) + pointConverter.dY;
             point1.Z = point.Z;
             return point1;
+        }
+
+        public static double ZInterpolationByX(double x)
+        {
+            //Z軸內插數值
+            //當X軸移動後，Z軸噴灑高度需要調整距離
+            double z0 = 0;
+            double z1 = 200;
+
+            double x0 = 0;
+            double x1 = 300000;
+
+            return ((x - x0) / (x1 - x0)) * (z1 - z0);
+            
         }
     }
 }

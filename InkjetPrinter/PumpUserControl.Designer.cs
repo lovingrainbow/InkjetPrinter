@@ -36,6 +36,10 @@ namespace InkjetPrinter
             this.gbSendData = new System.Windows.Forms.GroupBox();
             this.tbSendData = new System.Windows.Forms.TextBox();
             this.gbPipeControl = new System.Windows.Forms.GroupBox();
+            this.tbCleanTimes = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cbClean = new System.Windows.Forms.ComboBox();
+            this.btnClean = new System.Windows.Forms.Button();
             this.rbtnAir = new System.Windows.Forms.RadioButton();
             this.rbtnWater = new System.Windows.Forms.RadioButton();
             this.tbPipeIntro = new System.Windows.Forms.TextBox();
@@ -148,6 +152,10 @@ namespace InkjetPrinter
             // 
             // gbPipeControl
             // 
+            this.gbPipeControl.Controls.Add(this.tbCleanTimes);
+            this.gbPipeControl.Controls.Add(this.label1);
+            this.gbPipeControl.Controls.Add(this.cbClean);
+            this.gbPipeControl.Controls.Add(this.btnClean);
             this.gbPipeControl.Controls.Add(this.rbtnAir);
             this.gbPipeControl.Controls.Add(this.rbtnWater);
             this.gbPipeControl.Controls.Add(this.tbPipeIntro);
@@ -161,6 +169,48 @@ namespace InkjetPrinter
             this.gbPipeControl.TabIndex = 8;
             this.gbPipeControl.TabStop = false;
             this.gbPipeControl.Text = "Pipe Control";
+            // 
+            // tbCleanTimes
+            // 
+            this.tbCleanTimes.Location = new System.Drawing.Point(110, 280);
+            this.tbCleanTimes.Name = "tbCleanTimes";
+            this.tbCleanTimes.Size = new System.Drawing.Size(90, 29);
+            this.tbCleanTimes.TabIndex = 17;
+            this.tbCleanTimes.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tbCleanTimes.TextChanged += new System.EventHandler(this.tbCleanTimes_TextChanged);
+            this.tbCleanTimes.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.IntText_KeyPress);
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(10, 280);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(90, 30);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "清洗次數";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // cbClean
+            // 
+            this.cbClean.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbClean.FormattingEnabled = true;
+            this.cbClean.Items.AddRange(new object[] {
+            "針頭1",
+            "針頭2"});
+            this.cbClean.Location = new System.Drawing.Point(110, 241);
+            this.cbClean.Name = "cbClean";
+            this.cbClean.Size = new System.Drawing.Size(90, 28);
+            this.cbClean.TabIndex = 15;
+            this.cbClean.SelectedIndexChanged += new System.EventHandler(this.cbClean_SelectedIndexChanged);
+            // 
+            // btnClean
+            // 
+            this.btnClean.Location = new System.Drawing.Point(10, 240);
+            this.btnClean.Name = "btnClean";
+            this.btnClean.Size = new System.Drawing.Size(90, 30);
+            this.btnClean.TabIndex = 14;
+            this.btnClean.Text = "清洗管路";
+            this.btnClean.UseVisualStyleBackColor = true;
+            this.btnClean.Click += new System.EventHandler(this.btnClean_Click);
             // 
             // rbtnAir
             // 
@@ -569,7 +619,7 @@ namespace InkjetPrinter
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.gbPump);
             this.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "PumpUserControl";
             this.Size = new System.Drawing.Size(930, 410);
             this.Load += new System.EventHandler(this.PumpUserControl_Load);
@@ -863,12 +913,25 @@ namespace InkjetPrinter
                 tbNeedle2Pipe.Text = _Needle2Pipe.ToString();
             }
         }
+        private int _CleanTime;
+        public int CleanTime
+        {
+            get
+            {
+                return _CleanTime;
+            }
+            set
+            {
+                _CleanTime = value;
+                tbCleanTimes.Text = value.ToString();
+            }
+        }
+        public int CleanValve;
         public bool Cycle_Pipe;
         private int SendCount;
         //Pump Serial Port
         public SerialPort PumpPort = new SerialPort();
-        private int count;
-        private string Command;
+        public string Command;
         private System.Windows.Forms.GroupBox gbPump;
         private System.Windows.Forms.GroupBox gbReceiveData;
         private System.Windows.Forms.TextBox tbReceiveData;
@@ -914,6 +977,10 @@ namespace InkjetPrinter
         private System.Windows.Forms.Button btnValve;
         private System.Windows.Forms.Label lbValve;
         private System.Windows.Forms.Label lbValveTitle;
+        private System.Windows.Forms.TextBox tbCleanTimes;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cbClean;
+        private System.Windows.Forms.Button btnClean;
 
         delegate void Display(string str);
     }
